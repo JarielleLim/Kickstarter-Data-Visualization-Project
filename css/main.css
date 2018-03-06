@@ -19,3 +19,18 @@ h1{
 	color:#333333;
   opacity:0.8;
 }
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 40px;
+    height: 16px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: white;
+    border: 0px;
+    border-radius: 8px;
+		pointer-events: none;
+		display: block;
+		z-index: 1151 !important;
+}

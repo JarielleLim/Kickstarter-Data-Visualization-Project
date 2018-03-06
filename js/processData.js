@@ -75,7 +75,7 @@
       var colorScale =
         d3.scaleLinear()
         .domain([0, 15])
-        .range([ "rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
+        .range(["rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
 
       //define scales
       let x = d3.scaleLinear(),
@@ -86,6 +86,11 @@
 
       y.domain(catArray)
         .range([height, 10]);
+
+      // Define the div for the tooltip
+      var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
       var svg = d3.select("body")
         .append("svg")
@@ -107,16 +112,32 @@
           return y(d.key);
         })
         .attr("height", y.bandwidth())
+
+        .on("mouseover", function(d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div.text(d.values[1].value)
+            .style("left", (d3.event.pageX + d.values.length) + "px")
+            .style("top", (d3.event.pageY)+ "px");
+        })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0)
+        })
+
+
         .transition()
         .duration(1200)
         .attr("width", function(d) {
-            var total = 0;
-            for (var i = 0; i < d.values.length; i++) {
-              if (d.values[i].key == "successful") total = total + d.values[i].value;
-            }
-            return x(total) - margin;
-          })
-          ;
+          var total = 0;
+          for (var i = 0; i < d.values.length; i++) {
+            if (d.values[i].key == "successful") total = total + d.values[i].value;
+          }
+          return x(total) - margin;
+        });
+
 
       var bar2 = svg.selectAll("bar2")
         .data(projectCount)
@@ -134,6 +155,20 @@
           return x(total);
         })
 
+        .on("mouseover", function(d) {
+          div.transition()
+            .duration(200)
+            .style("opacity", .9);
+          div.text(d.values[0].value)
+            .style("left", (d3.event.pageX)+ "px")
+            .style("top", (d3.event.pageY)+ "px");
+        })
+        .on("mouseout", function(d) {
+          div.transition()
+            .duration(500)
+            .style("opacity", 0)
+        })
+
         .attr("y", function(d) {
           return y(d.key);
         })
@@ -148,55 +183,58 @@
             if (d.values[i].key == "failed") total = total + d.values[i].value;
           }
           return x(total) - margin;
-        })
+        });
 
-        //append x axis to svg
-        svg.append("g")
-          .attr("class", "x-axis")
-          .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x))
-          .attr("y", 30)
-          .attr("x", 650)
+      //append x axis to svg
+      svg.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .attr("y", 30)
+        .attr("x", 650)
 
-        //append y axis to svg
-        svg.append("g")
-          .attr("transform", "translate(100,0)")
-          .attr("class", "y-axis")
-          .call(d3.axisLeft(y))
+      //append y axis to svg
+      svg.append("g")
+        .attr("transform", "translate(100,0)")
+        .attr("class", "y-axis")
+        .call(d3.axisLeft(y))
 
-        //label for y axis: kickstarter main categories
-        svg.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("y", 0 - margin.left)
-          .attr("x", 0 - (height / 2))
-          .attr("dy", "1em")
-          .style("text-anchor", "middle")
-          .text("Kickstarter Main Categories");
+      //label for y axis: kickstarter main categories
+      svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Kickstarter Main Categories");
 
-        //label for x axis: # of Project Per Category
-        svg.append("text")
-          .attr("transform",
-            "translate(" + (width / 2) + " ," +
-            (height + margin / 2) + ")")
-          .style("text-anchor", "middle")
-          .text("# of Projects Per Category");
+      //label for x axis: # of Project Per Category
+      svg.append("text")
+        .attr("transform",
+          "translate(" + (width / 2) + " ," +
+          (height + margin / 2) + ")")
+        .style("text-anchor", "middle")
+        .text("# of Projects Per Category");
 
 
-        var ordinal = d3.scaleOrdinal()
-  .domain(["success", "failure"])
-  .range([ "rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
+      var ordinal = d3.scaleOrdinal()
+        .domain(["success", "failure"])
+        .range(["rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
 
-var svg = d3.select("svg");
+      var svg = d3.select("svg");
 
-svg.append("g")
-  .attr("class", "legendOrdinal")
-  .attr("transform", "translate(" + (width-70) + " ,50)");
+      svg.append("g")
+        .attr("class", "legendOrdinal")
+        .attr("transform", "translate(" + (width - 70) + " ,50)");
 
-var legendOrdinal = d3.legendColor()
-  .shape("path", d3.symbol().type(d3.symbolSquare).size(200)())
-  .shapePadding(10)
-  .scale(ordinal);
+      var legendOrdinal = d3.legendColor()
+        .shape("path", d3.symbol().type(d3.symbolSquare).size(200)())
+        .shapePadding(10)
+        .scale(ordinal);
 
-svg.select(".legendOrdinal")
-  .call(legendOrdinal);
+      svg.select(".legendOrdinal")
+        .call(legendOrdinal);
+
+
+
     });
