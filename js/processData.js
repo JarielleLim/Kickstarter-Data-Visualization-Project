@@ -1,11 +1,7 @@
     var url = "https://www.sfu.ca/~jdlim/iat355/ks-projects-parsed.csv";
 
-
-
     //load in data from online source
     d3.csv(url, function(error, data) {
-
-      // var success = 0;
 
       //count number of projects in each main category in each in nest
       var mainCatCount = d3.nest()
@@ -29,19 +25,13 @@
       console.log("category names:" + catArray);
 
 
-
       //pushing "value" from d3 nest into an array
       var catValueArray = new Array();
       for (i = 0; i < mainCatCount.length; i++) {
         catValueArray.push(mainCatCount[i]["value"]);
       }
 
-      // //for loop to go through category array
-      // for (i = 0; i < catValueArray.length; i++) {
-      //   console.log(catValueArray[i]);
-      // }
-
-      //create nest for project count
+      //create nest for project count in main category, and the state (successful, failed)
       var projectCount = d3.nest()
         .key(function(d) {
           return d.main_category;
@@ -57,7 +47,7 @@
       //error check
       if (error) console.log("Error: data not loaded!");
 
-      //change type of data if incorrect
+      //change type of data if needed (for later)
       data.forEach(function(d) {
         d.main_category = d.main_category;
         d.goal = +d.goal;
@@ -65,11 +55,9 @@
       });
 
       var maxNumberProject = d3.max(catValueArray);
-
       var width = 1000;
       var height = 500;
       var margin = 100;
-      console.log(maxNumberProject);
 
       //define color scale
       var colorScale =
@@ -98,7 +86,7 @@
         .attr("width", "1200")
         .attr("transform", "translate(100,0)");
 
-      //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      //create bar (length based on successes in each category)
       var bar = svg.selectAll("x")
         .data(projectCount)
         .enter()
@@ -113,23 +101,23 @@
         })
         .attr("height", y.bandwidth())
 
+        //add tool-tip function to show value when hover
         .on("mouseover", function(d) {
           div.transition()
             .duration(200)
             .style("opacity", .9);
           div.text(d.values[1].value)
             .style("left", (d3.event.pageX + d.values.length) + "px")
-            .style("top", (d3.event.pageY)+ "px");
+            .style("top", (d3.event.pageY) + "px");
         })
         .on("mouseout", function(d) {
           div.transition()
             .duration(500)
             .style("opacity", 0)
         })
-
-
         .transition()
-        .duration(1200)
+        .ease(d3.easeLinear)
+        .duration(500)
         .attr("width", function(d) {
           var total = 0;
           for (var i = 0; i < d.values.length; i++) {
@@ -138,7 +126,7 @@
           return x(total) - margin;
         });
 
-
+      //create bar (length based on successes in each category)
       var bar2 = svg.selectAll("bar2")
         .data(projectCount)
         .enter()
@@ -147,6 +135,7 @@
         .style('fill', function(d) {
           return colorScale(15);
         })
+
         .attr("x", function(d) {
           var total = 0;
           for (var i = 0; i < d.values.length; i++) {
@@ -155,13 +144,14 @@
           return x(total);
         })
 
+        //add tool-tip function to show value when hover
         .on("mouseover", function(d) {
           div.transition()
             .duration(200)
             .style("opacity", .9);
           div.text(d.values[0].value)
-            .style("left", (d3.event.pageX)+ "px")
-            .style("top", (d3.event.pageY)+ "px");
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY) + "px");
         })
         .on("mouseout", function(d) {
           div.transition()
@@ -174,9 +164,9 @@
         })
         .attr("height", y.bandwidth())
         .transition()
-        .delay(650)
+        .delay(460)
         .ease(d3.easeLinear)
-        .duration(1200)
+        .duration(500)
         .attr("width", function(d) {
           var total = 0;
           for (var i = 0; i < d.values.length; i++) {
@@ -216,7 +206,7 @@
         .style("text-anchor", "middle")
         .text("# of Projects Per Category");
 
-
+      //create legend for bar (http://d3-legend.susielu.com)
       var ordinal = d3.scaleOrdinal()
         .domain(["success", "failure"])
         .range(["rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
@@ -234,7 +224,15 @@
 
       svg.select(".legendOrdinal")
         .call(legendOrdinal);
-
-
-
     });
+
+    // SOURCES
+    //   tool-tips
+    //     https://bl.ocks.org/ayala-usma/d2f3b89c84e4ed66e22d02affcdcab73
+    //   d3.nest
+    //     https://bl.ocks.org/ProQuestionAsker/60e7a6e3117f9f433ef9c998f6c776b6
+    //     https://stackoverflow.com/questions/27347617/how-to-use-nest-and-rollup-functions-in-d3-to-create-a-bar-chart
+    //   accessing nested data
+    //     https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json
+    //   legend
+    //     http://d3-legend.susielu.com
