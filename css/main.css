@@ -1,13 +1,21 @@
 body{
 	font-family: 'Lato', sans-serif;
+	background-color: white;
 	color:#333333;
 }
 
-.text-center{
-	text-align: center;
+.text{
+	text-align: left;
+	margin-left: 200px;
 }
 
 h1{
 	text-transform: uppercase;
 	font-weight:bold;
+}
+
+.legend rect {
+  background-color: white;
+	color:#333333;
+  opacity:0.8;
 }
