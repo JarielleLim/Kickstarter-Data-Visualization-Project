@@ -44,6 +44,8 @@
         })
         .entries(data);
 
+
+      console.log(projectCount);
       //error check
       if (error) console.log("Error: data not loaded!");
 
@@ -63,7 +65,7 @@
       var colorScale =
         d3.scaleLinear()
         .domain([0, 15])
-        .range(["rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
+        .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
 
       //define scales
       let x = d3.scaleLinear(),
@@ -113,18 +115,17 @@
         .on("mouseout", function(d) {
           div.transition()
             .duration(500)
-            .style("opacity", 0)
+            .style("opacity", 0);
         })
         .transition()
         .ease(d3.easeLinear)
         .duration(500)
+        //calculate width of bar based on success value in each category
         .attr("width", function(d) {
-          var total = 0;
-          for (var i = 0; i < d.values.length; i++) {
-            if (d.values[i].key == "successful") total = total + d.values[i].value;
-          }
-          return x(total) - margin;
+          var totalSuccess = d.values[1].value;
+          return x(totalSuccess) - margin
         });
+
 
       //create bar (length based on successes in each category)
       var bar2 = svg.selectAll("bar2")
@@ -135,13 +136,11 @@
         .style('fill', function(d) {
           return colorScale(15);
         })
-
+        //calculate width of bar based on success value in each category
+        //to find starting position for graph
         .attr("x", function(d) {
-          var total = 0;
-          for (var i = 0; i < d.values.length; i++) {
-            if (d.values[i].key == "successful") total = total + d.values[i].value;
-          }
-          return x(total);
+          var totalSuccessCheck = d.values[1].value;
+          return x(totalSuccessCheck);
         })
 
         //add tool-tip function to show value when hover
@@ -156,7 +155,7 @@
         .on("mouseout", function(d) {
           div.transition()
             .duration(500)
-            .style("opacity", 0)
+            .style("opacity", 0);
         })
 
         .attr("y", function(d) {
@@ -164,15 +163,13 @@
         })
         .attr("height", y.bandwidth())
         .transition()
-        .delay(460)
+        .delay(500)
         .ease(d3.easeLinear)
         .duration(500)
+        //calculate width of bar based on failed value in each category
         .attr("width", function(d) {
-          var total = 0;
-          for (var i = 0; i < d.values.length; i++) {
-            if (d.values[i].key == "failed") total = total + d.values[i].value;
-          }
-          return x(total) - margin;
+          var totalFailed = d.values[0].value
+          return x(totalFailed) - margin;
         });
 
       //append x axis to svg
@@ -209,7 +206,7 @@
       //create legend for bar (http://d3-legend.susielu.com)
       var ordinal = d3.scaleOrdinal()
         .domain(["success", "failure"])
-        .range(["rgb(85, 178, 96)", "rgb(50, 50, 50)"]);
+        .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
 
       var svg = d3.select("svg");
 
