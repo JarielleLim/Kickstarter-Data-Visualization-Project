@@ -1,5 +1,6 @@
     var url = "https://www.sfu.ca/~jdlim/iat355/ks-projects-parsed.csv";
 
+
     //load in data from online source
     d3.csv(url, function(error, data) {
 
@@ -57,9 +58,13 @@
       });
 
       var maxNumberProject = d3.max(catValueArray);
-      var width = 1000;
-      var height = 500;
-      var margin = 100;
+            var margin = 100;
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+var padding = 50;
+      var widthGraph = window.innerWidth + padding + padding;
+      var heightGraph = window.innerHeight + padding + padding;
+
 
       //define color scale
       var colorScale =
@@ -82,11 +87,23 @@
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-      var svg = d3.select("body")
-        .append("svg")
-        .attr("height", "1000")
-        .attr("width", "1200")
-        .attr("transform", "translate(100,0)");
+
+
+      // var svg = d3.select("body")
+      //   .append("svg")
+      //   .attr("height", "1000")
+      //   .attr("width", "1200")
+      //   .attr("transform", "translate(100,0)");
+        var svg = d3.select("div#chartId")
+          .append("div")
+          .classed("svg-container", true) //container class to make it responsive
+          .append("svg")
+          //responsive SVG needs these 2 attributes and no width and height attr
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox","0 0 " + widthGraph + " " + heightGraph)
+          //class to make it responsive
+          .classed("svg-content-responsive", true)
+          //.attr("transform", "translate(-100,0)");
 
       //create bar (length based on successes in each category)
       var bar = svg.selectAll("x")
