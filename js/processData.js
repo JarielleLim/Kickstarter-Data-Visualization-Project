@@ -58,10 +58,12 @@
       });
 
       var maxNumberProject = d3.max(catValueArray);
-            var margin = 100;
+      var margin = 100;
+      var padding = 50;
+
       var width = window.innerWidth;
       var height = window.innerHeight;
-var padding = 50;
+
       var widthGraph = window.innerWidth + padding + padding;
       var heightGraph = window.innerHeight + padding + padding;
 
@@ -87,23 +89,15 @@ var padding = 50;
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-
-
-      // var svg = d3.select("body")
-      //   .append("svg")
-      //   .attr("height", "1000")
-      //   .attr("width", "1200")
-      //   .attr("transform", "translate(100,0)");
-        var svg = d3.select("div#chartId")
-          .append("div")
-          .classed("svg-container", true) //container class to make it responsive
-          .append("svg")
-          //responsive SVG needs these 2 attributes and no width and height attr
-          .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox","0 0 " + widthGraph + " " + heightGraph)
-          //class to make it responsive
-          .classed("svg-content-responsive", true)
-          //.attr("transform", "translate(-100,0)");
+      //append div for graph
+      var svg = d3.select("div#chartId")
+        .append("div")
+        .classed("svg-container", true) //container class to make it responsive
+        .append("svg")
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", "0 0 " + widthGraph + " " + heightGraph)
+        //class to make it responsive
+        .classed("svg-content-responsive", true);
 
       //create bar (length based on successes in each category)
       var bar = svg.selectAll("x")
@@ -250,3 +244,5 @@ var padding = 50;
     //     https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json
     //   legend
     //     http://d3-legend.susielu.com
+    //   Scalable
+    //    https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js
