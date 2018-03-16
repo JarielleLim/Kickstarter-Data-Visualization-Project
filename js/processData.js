@@ -74,6 +74,8 @@
         .domain([0, 15])
         .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
 
+function graph1(){
+
       //define scales
       let x = d3.scaleLinear(),
         y = d3.scaleBand().rangeRound([height, 0]).padding(0.2);
@@ -114,6 +116,18 @@
         })
         .attr("height", y.bandwidth())
 
+        .on("click", function(d) {
+          var highlightkey = d.key;
+          console.log(d.key)
+
+          if (highlightkey == "Fashion") {
+            console.log("we did it!")
+          }
+
+          if (highlightkey == "Technology") {
+            console.log("tech time!~")
+          }
+        })
         //add tool-tip function to show value when hover
         .on("mouseover", function(d) {
           div.transition()
@@ -152,6 +166,21 @@
         .attr("x", function(d) {
           var totalSuccessCheck = d.values[1].value;
           return x(totalSuccessCheck);
+        })
+
+
+        .on("click", function(d) {
+          var highlightkey = d.key;
+          console.log(d.key)
+
+          if (highlightkey == "Fashion") {
+            console.log("we did it!")
+            this
+          }
+
+          if (highlightkey == "Technology") {
+            console.log("tech time!~")
+          }
         })
 
         //add tool-tip function to show value when hover
@@ -214,6 +243,7 @@
         .style("text-anchor", "middle")
         .text("# of Projects Per Category");
 
+
       //create legend for bar (http://d3-legend.susielu.com)
       var ordinal = d3.scaleOrdinal()
         .domain(["success", "failure"])
@@ -232,7 +262,14 @@
 
       svg.select(".legendOrdinal")
         .call(legendOrdinal);
-    });
+    }
+
+//function calling
+graph1();
+
+
+  });
+
 
     // SOURCES
     //   tool-tips

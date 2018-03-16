@@ -1,50 +1,68 @@
-body{
-	font-family: 'Lato', sans-serif;
-	background-color: white;
-	color:#333333;
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: white;
+  color: #333333;
 }
 
-.text{
-	text-align: left;
-	margin-left: 100px;
+.text {
+  text-align: left;
+  margin-left: 100px;
 }
 
-h1{
-	text-transform: uppercase;
-	font-weight:bold;
+h1 {
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .legend rect {
   background-color: white;
-	color:#333333;
-  opacity:0.8;
+  color: #333333;
+  opacity: 0.8;
 }
 
 .tooltip {
-    position: absolute;
-    text-align: center;
-    width: 40px;
-    height: 16px;
-    padding: 2px;
-    font: 12px sans-serif;
-    background: white;
-    border: 0px;
-    border-radius: 8px;
-		display: block;
-		z-index: 1151 !important;
+  position: absolute;
+  text-align: center;
+  width: 40px;
+  height: 16px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: white;
+  border: 0px;
+  border-radius: 8px;
+  display: block;
+  z-index: 1151 !important;
 }
 
 .svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
 }
+
 .svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+.brushed {
+  fill: orange;
+  stroke: darkorange;
+  opacity: 1.0;
+}
+
+.non_brushed {
+  fill: #404040;
+  opacity: 0.5;
+}
+
+
+.dim {
+  opacity: 0.3;
 }
