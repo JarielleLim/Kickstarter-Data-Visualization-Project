@@ -24,6 +24,60 @@
       }
 
       console.log("category names:" + catArray);
+      
+      
+      //Parse differet month
+      var monthParse = d3.nest()
+
+        .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+      
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+	
+				console.log(monthParse);
+				
+				var months = new Array();
+				for(i = 0; i < monthParse.length; i++){
+					months.push(monthParse[i]["key"]);
+				}
+				
+				sortMonths = months.sort();
+			
+			console.log(sortMonths);
+			
+			var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+			console.log(monthNames[parseInt(sortMonths[0])-1]);	
+				
+				
+   
+   
+   //projects that appear within each month
+       var projectPerMonth = d3.nest()
+        .key(function(d) {
+          return d.main_category;
+        })
+        
+        .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+        
+        .key(function(d) {
+          return d.state;
+        })
+        
+      
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+
+				
+				console.log(projectPerMonth);
+
 
 
       //pushing "value" from d3 nest into an array
@@ -49,6 +103,27 @@
       console.log(projectCount);
       //error check
       if (error) console.log("Error: data not loaded!");
+      
+      
+      var projectPerMonth = d3.nest()
+        .key(function(d) {
+          return d.main_category;
+        })
+        
+        .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+        
+        .key(function(d) {
+          return d.state;
+        })
+        
+      
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+      
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -73,6 +148,11 @@
         d3.scaleLinear()
         .domain([0, 15])
         .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
+        
+
+
+
+
 
 function graph1(){
 
@@ -100,6 +180,9 @@ function graph1(){
         .attr("viewBox", "0 0 " + widthGraph + " " + heightGraph)
         //class to make it responsive
         .classed("svg-content-responsive", true);
+        
+        
+
 
       //create bar (length based on successes in each category)
       var bar = svg.selectAll("x")
@@ -119,14 +202,23 @@ function graph1(){
         .on("click", function(d) {
           var highlightkey = d.key;
           console.log(d.key)
-
+          
+          
+          graph2();
+          
+     
+					document.getElementById("chartId2").style.display = "block";
           if (highlightkey == "Fashion") {
             console.log("we did it!")
           }
 
           if (highlightkey == "Technology") {
-            console.log("tech time!~")
+            console.log("tech time!~")  
           }
+          
+          
+          
+          
         })
         //add tool-tip function to show value when hover
         .on("mouseover", function(d) {
@@ -181,6 +273,9 @@ function graph1(){
           if (highlightkey == "Technology") {
             console.log("tech time!~")
           }
+          
+          
+          
         })
 
         //add tool-tip function to show value when hover
@@ -266,6 +361,59 @@ function graph1(){
 
 //function calling
 graph1();
+
+	
+	function graph2(){
+
+
+		//define scales
+      let /* x = d3.scaleLinear(), */
+      
+       x = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
+     /*  y = d3.scaleBand().rangeRound([height, 0]).padding(0.2); */
+     y = d3.scaleLinear().range([height, 0]);
+
+      x.domain(monthNames)
+        .range([margin, width]);
+
+      y.domain([0,50])
+       .range([height, 10]);
+
+
+var svg2 = d3.select("div#chartId2")
+			.append("div")
+			.classed("svg-container", true) //container class to make it responsive				
+			.append("svg")
+			.attr("preserveAspectRatio", "xMinYMin meet")
+			.attr("viewBox", "0 0 " + widthGraph + " " + heightGraph)
+			//class to make it responsive
+			.classed("svg-content-responsive", true);
+			
+
+
+			//append x axis to svg
+      svg2.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .attr("y", 30)
+        .attr("x", 650)
+
+      //append y axis to svg
+      svg2.append("g")
+        .attr("transform", "translate(100,0)")
+        .attr("class", "y-axis")
+        .call(d3.axisLeft(y))
+
+
+
+
+
+}
+
+/* graph2(); */
+	
+	
 
 
   });
