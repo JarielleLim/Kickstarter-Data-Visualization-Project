@@ -348,9 +348,9 @@ function graph1(){
 
             sortItems = function (a, b) {
                 if (sortOrder) {
-                    return a.values.length - b.values.length;
+                    return a.value- b.value;
                 }
-                return b.values.length - a.values.length;
+                return b.value - a.value;
             };
 
             svg.selectAll("rect")
@@ -384,6 +384,51 @@ function graph1(){
         };
         // Add the onclick callback to the button
         d3.select("#sort").on("click", sortBars);
+
+        // Add the blue line title
+        svg.append("text")
+        	.attr("x", 0)
+        	.attr("y", height + margin.top + 10)
+        	.attr("class", "button")
+        	.style("fill", "steelblue")
+        	.on("click", function(){
+        		// Determine if current line is visible
+        		var active   = bar.active ? false : true,
+        		  newOpacity = active ? 0 : 1;
+
+
+        		// Hide or show the elements
+        		d3.select(".bar").style("opacity", newOpacity);
+        		// Update whether or not the elements are active
+        		bar.active = active;
+
+            if (active == true){
+              bar2.attr("x", 0)
+            } else {
+              bar2.attr("x", function(d) {
+                var totalSuccessCheck = d.values[1].value;
+                return xScale(totalSuccessCheck);
+              })
+            }
+        	})
+        	.text("Success");
+
+        // Add the red line title
+        svg.append("text")
+        	.attr("x", 0)
+        	.attr("y", height + margin.top + 30)
+        	.attr("class", "button")
+        	.style("fill", "red")
+        	.on("click", function(){
+        		// Determine if current line is visible
+        		var active   = bar2.active ? false : true ,
+        		  newOpacity = active ? 0 : 1;
+        		// Hide or show the elements
+        		d3.select(".bar2").style("opacity", newOpacity);
+        		// Update whether or not the elements are active
+        		bar2.active = active;
+        	})
+        	.text("Failed");
 
 
       //create legend for bar (http://d3-legend.susielu.com)
