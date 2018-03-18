@@ -3,6 +3,12 @@
 
     //load in data from online source
     d3.csv(url, function(error, data) {
+//var margin = 100;
+      var margin = {top: 20, right: 20, bottom: 40, left: 100};
+      var padding = 50;
+
+      var width = 800;
+      var height = 500;
 
       //count number of projects in each main category in each in nest
       var mainCatCount = d3.nest()
@@ -24,58 +30,56 @@
       }
 
       console.log("category names:" + catArray);
-      
-      
+
+
       //Parse differet month
       var monthParse = d3.nest()
 
         .key(function(d) {
           return d.launched.split("-")[1];
         })
-      
-        .rollup(function(v) {
-          return v.length;
-        })
-        .entries(data);
-	
-				console.log(monthParse);
-				
-				var months = new Array();
-				for(i = 0; i < monthParse.length; i++){
-					months.push(monthParse[i]["key"]);
-				}
-				
-				sortMonths = months.sort();
-			
-			console.log(sortMonths);
-			
-			var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-			console.log(monthNames[parseInt(sortMonths[0])-1]);	
-				
-				
-   
-   
-   //projects that appear within each month
-       var projectPerMonth = d3.nest()
-        .key(function(d) {
-          return d.main_category;
-        })
-        
-        .key(function(d) {
-          return d.launched.split("-")[1];
-        })
-        
-        .key(function(d) {
-          return d.state;
-        })
-        
-      
+
         .rollup(function(v) {
           return v.length;
         })
         .entries(data);
 
-				
+				console.log(monthParse);
+
+				var months = new Array();
+				for(i = 0; i < monthParse.length; i++){
+					months.push(monthParse[i]["key"]);
+				}
+
+				sortMonths = months.sort();
+
+			console.log(sortMonths);
+
+			var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+			console.log(monthNames[parseInt(sortMonths[0])-1]);
+
+
+   //projects that appear within each month
+       var projectPerMonth = d3.nest()
+        .key(function(d) {
+          return d.main_category;
+        })
+
+        .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+
+        .key(function(d) {
+          return d.state;
+        })
+
+
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+
+
 				console.log(projectPerMonth);
 
 
@@ -103,27 +107,26 @@
       console.log(projectCount);
       //error check
       if (error) console.log("Error: data not loaded!");
-      
-      
+
+
       var projectPerMonth = d3.nest()
         .key(function(d) {
           return d.main_category;
         })
-        
+
         .key(function(d) {
           return d.launched.split("-")[1];
         })
-        
+
         .key(function(d) {
           return d.state;
         })
-        
-      
+
         .rollup(function(v) {
           return v.length;
         })
         .entries(data);
-      
+
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -133,14 +136,12 @@
       });
 
       var maxNumberProject = d3.max(catValueArray);
-      var margin = 100;
-      var padding = 50;
 
-      var width = window.innerWidth;
-      var height = window.innerHeight;
-
-      var widthGraph = window.innerWidth + padding + padding;
-      var heightGraph = window.innerHeight + padding + padding;
+      // var width = window.innerWidth;
+      // var height = window.innerHeight;
+      //
+      // var widthGraph = window.innerWidth + padding + padding;
+      // var heightGraph = window.innerHeight + padding + padding;
 
 
       //define color scale
@@ -148,22 +149,18 @@
         d3.scaleLinear()
         .domain([0, 15])
         .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
-        
-
-
-
 
 
 function graph1(){
 
       //define scales
-      let x = d3.scaleLinear(),
-        y = d3.scaleBand().rangeRound([height, 0]).padding(0.2);
+      let xScale = d3.scaleLinear(),
+        yScale = d3.scaleBand().rangeRound([height, 0]).padding(0.2);
 
-      x.domain([0, maxNumberProject])
-        .range([margin, width]);
+      xScale.domain([0, maxNumberProject])
+        .range([margin.left, width]);
 
-      y.domain(catArray)
+      yScale.domain(catArray)
         .range([height, 10]);
 
       // Define the div for the tooltip
@@ -171,17 +168,23 @@ function graph1(){
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-      //append div for graph
+      // //append div for graph
+
+      // var svg = d3.select("#chartId")
+      //  .append("svg")
+      //  .attr("height", height + padding + margin)
+      //  .attr("width", width)
+      //  .attr("transform", "translate(100,0)");
+
       var svg = d3.select("div#chartId")
         .append("div")
         .classed("svg-container", true) //container class to make it responsive
         .append("svg")
         .attr("preserveAspectRatio", "xMinYMin meet")
-        .attr("viewBox", "0 0 " + widthGraph + " " + heightGraph)
+        //.attr("viewBox", "0 0 " + (width) + " " + (height))
+        .attr("viewBox", "0 0 1000 1200")
         //class to make it responsive
         .classed("svg-content-responsive", true);
-        
-        
 
 
       //create bar (length based on successes in each category)
@@ -193,32 +196,32 @@ function graph1(){
         .style('fill', function(d) {
           return colorScale(1);
         })
-        .attr("x", margin)
+        .attr("x", margin.left)
         .attr("y", function(d) {
-          return y(d.key);
+          return yScale(d.key);
         })
-        .attr("height", y.bandwidth())
+        .attr("height", yScale.bandwidth())
 
         .on("click", function(d) {
           var highlightkey = d.key;
           console.log(d.key)
-          
-          
+
+
           graph2();
-          
-     
+
+
 					document.getElementById("chartId2").style.display = "block";
           if (highlightkey == "Fashion") {
             console.log("we did it!")
           }
 
           if (highlightkey == "Technology") {
-            console.log("tech time!~")  
+            console.log("tech time!~")
           }
-          
-          
-          
-          
+
+
+
+
         })
         //add tool-tip function to show value when hover
         .on("mouseover", function(d) {
@@ -240,7 +243,7 @@ function graph1(){
         //calculate width of bar based on success value in each category
         .attr("width", function(d) {
           var totalSuccess = d.values[1].value;
-          return x(totalSuccess) - margin
+          return xScale(totalSuccess) - margin.left
         });
 
 
@@ -257,7 +260,7 @@ function graph1(){
         //to find starting position for graph
         .attr("x", function(d) {
           var totalSuccessCheck = d.values[1].value;
-          return x(totalSuccessCheck);
+          return xScale(totalSuccessCheck);
         })
 
 
@@ -273,9 +276,9 @@ function graph1(){
           if (highlightkey == "Technology") {
             console.log("tech time!~")
           }
-          
-          
-          
+
+
+
         })
 
         //add tool-tip function to show value when hover
@@ -294,24 +297,25 @@ function graph1(){
         })
 
         .attr("y", function(d) {
-          return y(d.key);
+          return yScale(d.key);
         })
-        .attr("height", y.bandwidth())
+        .attr("height", yScale.bandwidth())
         .transition()
         .delay(500)
         .ease(d3.easeLinear)
         .duration(500)
+
         //calculate width of bar based on failed value in each category
         .attr("width", function(d) {
           var totalFailed = d.values[0].value
-          return x(totalFailed) - margin;
+          return xScale(totalFailed) - margin.left;
         });
 
       //append x axis to svg
       svg.append("g")
         .attr("class", "x-axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(xScale))
         .attr("y", 30)
         .attr("x", 650)
 
@@ -319,12 +323,12 @@ function graph1(){
       svg.append("g")
         .attr("transform", "translate(100,0)")
         .attr("class", "y-axis")
-        .call(d3.axisLeft(y))
+        .call(d3.axisLeft(yScale))
 
       //label for y axis: kickstarter main categories
       svg.append("text")
         .attr("transform", "rotate(-90)")
-        .attr("y", 0 - margin.left)
+        .attr("y", 0 )
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
@@ -334,9 +338,52 @@ function graph1(){
       svg.append("text")
         .attr("transform",
           "translate(" + (width / 2) + " ," +
-          (height + margin / 2) + ")")
+          (height + margin.bottom) + ")")
         .style("text-anchor", "middle")
         .text("# of Projects Per Category");
+
+        var sortOrder = false;
+        var sortBars = function () {
+            sortOrder = !sortOrder;
+
+            sortItems = function (a, b) {
+                if (sortOrder) {
+                    return a.values.length - b.values.length;
+                }
+                return b.values.length - a.values.length;
+            };
+
+            svg.selectAll("rect")
+                .sort(sortItems)
+                .transition()
+                .delay(function (d, i) {
+                return i * 50;
+            })
+                .duration(1000)
+                .attr("x", function (d, i) {
+                return xScale(i);
+            });
+
+            svg.selectAll('text')
+                .sort(sortItems)
+                .transition()
+                .delay(function (d, i) {
+                return i * 50;
+            })
+                .duration(1000)
+                .text(function (d) {
+                return d.value;
+            })
+                .attr("text-anchor", "middle")
+                .attr("x", function (d, i) {
+                return xScale(i) + xScale.rangeBand() / 2;
+            })
+                .attr("y", function (d) {
+                return h - yScale(d.value) + 14;
+            });
+        };
+        // Add the onclick callback to the button
+        d3.select("#sort").on("click", sortBars);
 
 
       //create legend for bar (http://d3-legend.susielu.com)
@@ -362,58 +409,57 @@ function graph1(){
 //function calling
 graph1();
 
-	
+
 	function graph2(){
 
 
 		//define scales
       let /* x = d3.scaleLinear(), */
-      
-       x = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
+
+       xScale = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
      /*  y = d3.scaleBand().rangeRound([height, 0]).padding(0.2); */
-     y = d3.scaleLinear().range([height, 0]);
+     yScale = d3.scaleLinear().range([height, 0]);
 
-      x.domain(monthNames)
-        .range([margin, width]);
+      xScale.domain(monthNames)
+        .range([margin.left, width]);
 
-      y.domain([0,50])
+      yScale.domain([0,50])
        .range([height, 10]);
 
 
 var svg2 = d3.select("div#chartId2")
 			.append("div")
-			.classed("svg-container", true) //container class to make it responsive				
+			.classed("svg-container2", true) //container class to make it responsive
 			.append("svg")
 			.attr("preserveAspectRatio", "xMinYMin meet")
-			.attr("viewBox", "0 0 " + widthGraph + " " + heightGraph)
+			.attr("viewBox", "0 0 1000 1200")
 			//class to make it responsive
 			.classed("svg-content-responsive", true);
-			
+
 
 
 			//append x axis to svg
       svg2.append("g")
         .attr("class", "x-axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
-        .attr("y", 30)
-        .attr("x", 650)
+        .call(d3.axisBottom(xScale))
+        .attr("yScale", 30)
+        .attr("xScale", 800)
+        .attr("font-size", "8px")
+        .attr("padding", "16rem")
 
       //append y axis to svg
       svg2.append("g")
         .attr("transform", "translate(100,0)")
         .attr("class", "y-axis")
-        .call(d3.axisLeft(y))
-
-
-
-
+        .call(d3.axisLeft(yScale))
 
 }
 
+
 /* graph2(); */
-	
-	
+
+
 
 
   });

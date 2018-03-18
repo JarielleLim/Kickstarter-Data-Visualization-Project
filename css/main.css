@@ -2,16 +2,24 @@ body {
   font-family: 'Lato', sans-serif;
   background-color: white;
   color: #333333;
+  font-size: 0.6rem;
 }
 
-.text {
-  text-align: left;
-  margin-left: 100px;
-}
+
 
 h1 {
   text-transform: uppercase;
   font-weight: bold;
+  text-align: left;
+  margin-left: 100px;
+  font-size: 2rem;
+}
+
+rect {
+	-moz-transition: all 0.3s;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
 }
 
 .legend rect {
@@ -38,10 +46,19 @@ h1 {
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  padding-bottom: 30%;
   /* aspect ratio */
   vertical-align: top;
-  overflow: hidden;
+}
+
+.svg-container2 {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 30%;
+  /* aspect ratio */
+  vertical-align: top;
+  margin-bottom: 200px;
 }
 
 .svg-content-responsive {
@@ -70,6 +87,17 @@ h1 {
 
 #chartId2{
 /* 	display:none; */
-	
-	
+}
+
+.col-1-2{
+  float:left;
+  width:50%;
+  padding:0;
+  margin:0;
+}
+
+.col-2-2{
+  float:left;
+  width:50%;
+  padding:0;
 }
