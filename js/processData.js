@@ -46,6 +46,9 @@
 
 				console.log(monthParse);
 
+				
+
+
 				var months = new Array();
 				for(i = 0; i < monthParse.length; i++){
 					months.push(monthParse[i]["key"]);
@@ -59,29 +62,7 @@
 			console.log(monthNames[parseInt(sortMonths[0])-1]);
 
 
-   //projects that appear within each month
-       var projectPerMonth = d3.nest()
-        .key(function(d) {
-          return d.main_category;
-        })
-
-        .key(function(d) {
-          return d.launched.split("-")[1];
-        })
-
-        .key(function(d) {
-          return d.state;
-        })
-
-
-        .rollup(function(v) {
-          return v.length;
-        })
-        .entries(data);
-
-
-				console.log(projectPerMonth);
-
+   
 
 
       //pushing "value" from d3 nest into an array
@@ -207,7 +188,7 @@ function graph1(){
           console.log(d.key)
 
 
-          graph2();
+          graph2(d.key);
 
 
 					document.getElementById("chartId2").style.display = "block";
@@ -455,7 +436,86 @@ function graph1(){
 graph1();
 
 
-	function graph2(){
+	function graph2(selection){
+
+			//projects that appear within each month
+       var projectPerMonth = d3.nest()
+   
+   
+			 .key(function(d) {
+          return d.main_category == selection;
+        })
+        .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+
+   
+        
+
+/*
+   
+        .key(function(d) {
+          return d.state;
+        })
+*/
+
+
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+
+
+				console.log(projectPerMonth);
+				
+				
+							var months = new Array();
+				for(i = 0; i < monthParse.length; i++){
+					months.push(monthParse[i]["key"]);
+				}
+				
+    /*
+   var keys=projectPerMonth.map( function (d) {
+       		return d['key']{   		
+           return d['key'];
+           }
+       }) ;
+*/
+     /*   console.log(keys); */
+				
+
+				
+/* 				console.log(projectPerMonth); */
+			
+				/*
+
+				var monthsProject = new Array();
+				for(i = 0; i < projectPerMonth.length; i++){
+					monthsProject.push(projectPerMonth[i]);
+				}
+*/
+
+
+				/* console.log(proj) */
+				
+				console.log(projectPerMonth["true"]);
+				var values = new Array();
+				for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
+					values.push(projectPerMonth[1]["values"][i]["value"]);
+				}
+				console.log(values);
+				
+				
+				//number of projects that appear per month
+				var projectCountMax = d3.max(values);
+				
+				
+
+
+				/*
+var maxNumberProject = d3.max(projectPerMonth);
+				console.log(maxNumberProject);
+*/
 
 
 		//define scales
@@ -465,10 +525,10 @@ graph1();
      /*  y = d3.scaleBand().rangeRound([height, 0]).padding(0.2); */
      yScale = d3.scaleLinear().range([height, 0]);
 
-      xScale.domain(monthNames)
+      xScale.domain(sortMonths)
         .range([margin.left, width]);
 
-      yScale.domain([0,50])
+      yScale.domain([0,projectCountMax])
        .range([height, 10]);
 
 
@@ -498,6 +558,15 @@ var svg2 = d3.select("div#chartId2")
         .attr("transform", "translate(100,0)")
         .attr("class", "y-axis")
         .call(d3.axisLeft(yScale))
+        
+        
+        
+      var line = d3.line()
+					
+        .x(function(d){return d.key;})
+        .y(function(d){d.values;})
+        ;
+        
 
 }
 
