@@ -500,6 +500,43 @@ graph1();
 				
 				
 
+				//create nesting for goals
+				var catGoal = d3.nest()
+					 .key(function(d) {
+          return d.main_category == selection;
+        })
+				.key(function(d) {
+          return d.goal;
+        })
+        
+		
+      
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+        
+				console.log(catGoal);
+				
+					
+					
+				//create array for category goals	
+				var catGoalArray = new Array();
+				for (i = 0; i < catGoal[1]["values"].length; i++) {
+					if(catGoal[1]["key"] =="true"){
+					catGoalArray.push(catGoal[1]["values"][i]["key"]);
+					}
+					else{
+						catGoalArray.push(catGoal[0]["values"][i]["key"]);
+					}
+				}
+				console.log(catGoalArray);
+				
+				//get max value
+				var maxGoal = d3.max(catGoalArray);
+				
+
+
 
 			//projects that appear within each month
        var projectPerMonthStates = d3.nest()
@@ -545,7 +582,7 @@ graph1();
 
 
 		 	var valueline = d3.line()
-		 	.x(function(d) { return x(d.launched); })
+		 	.x(function(d) {  return d.launched.split("-")[1];})
 		 	.y(function(d) { return y(d.pledged); });
 
 
