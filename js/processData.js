@@ -109,6 +109,17 @@
         .entries(data);
 
 
+				
+/*
+	   var line = d3.svg.line()
+	   	.xScale2(monthNames)
+	   	.yScale2(projectCountMax)
+	   	.interpolate("linear")
+	   	;
+*/
+			 
+
+
       //change type of data if needed (for later)
       data.forEach(function(d) {
         d.main_category = d.main_category;
@@ -448,18 +459,12 @@ graph1();
         .key(function(d) {
           return d.launched.split("-")[1];
         })
-
-   
+        
+        
+        
         
 
-/*
-   
-        .key(function(d) {
-          return d.state;
-        })
-*/
-
-
+ 
         .rollup(function(v) {
           return v.length;
         })
@@ -469,67 +474,91 @@ graph1();
 				console.log(projectPerMonth);
 				
 				
-							var months = new Array();
+				var months = new Array();
 				for(i = 0; i < monthParse.length; i++){
 					months.push(monthParse[i]["key"]);
 				}
 				
-    /*
-   var keys=projectPerMonth.map( function (d) {
-       		return d['key']{   		
-           return d['key'];
-           }
-       }) ;
-*/
-     /*   console.log(keys); */
-				
 
-				
-/* 				console.log(projectPerMonth); */
-			
-				/*
-
-				var monthsProject = new Array();
-				for(i = 0; i < projectPerMonth.length; i++){
-					monthsProject.push(projectPerMonth[i]);
-				}
-*/
-
-
-				/* console.log(proj) */
-				
-				console.log(projectPerMonth["true"]);
+				//parse out the number of projects that appear per month
+			/* 	console.log(projectPerMonth["true"]); */
 				var values = new Array();
 				for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
+					if(projectPerMonth[1]["key"] =="true"){
 					values.push(projectPerMonth[1]["values"][i]["value"]);
+					}
+					else{
+						values.push(projectPerMonth[0]["values"][i]["value"]);
+					}
 				}
 				console.log(values);
 				
 				
-				//number of projects that appear per month
+				
+				//largest number that appears within array
 				var projectCountMax = d3.max(values);
 				
 				
 
 
-				/*
-var maxNumberProject = d3.max(projectPerMonth);
-				console.log(maxNumberProject);
+			//projects that appear within each month
+       var projectPerMonthStates = d3.nest()
+			
+			  .key(function(d) {
+          return d.launched.split("-")[1];
+        })
+			
+			 .key(function(d) {
+          return d.main_category == selection;
+        })
+      
+        
+        
+     /*
+   .key(function(d) {
+          return d.state;
+        })
 */
+      
+        .rollup(function(v) {
+          return v.length;
+        })
+        .entries(data);
+
+
+
+
+				console.log(projectPerMonthStates);
+
+			
 
 
 		//define scales
-      let /* x = d3.scaleLinear(), */
-
-       xScale = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
+       /* x = d3.scaleLinear(), */
+		/* 	xScale2 = d3.scaleLinear().range([0,width]), */
+			var x = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
+			
+       /* xScale2 = d3.scaleBand().rangeRound([width, 0]).padding(0.1); */
      /*  y = d3.scaleBand().rangeRound([height, 0]).padding(0.2); */
-     yScale = d3.scaleLinear().range([height, 0]);
+     var y = d3.scaleLinear().range([height, 0]);
 
-      xScale.domain(sortMonths)
+
+
+		 	var valueline = d3.line()
+		 	.x(function(d) { return x(d.launched); })
+		 	.y(function(d) { return y(d.pledged); });
+
+
+
+      x.domain(monthNames)
         .range([margin.left, width]);
 
-      yScale.domain([0,projectCountMax])
+      y.domain([0,projectCountMax])
        .range([height, 10]);
+
+
+
+
 
 
 var svg2 = d3.select("div#chartId2")
@@ -543,11 +572,21 @@ var svg2 = d3.select("div#chartId2")
 
 
 
+/*
+			var area = d3.area()
+	    .curve(d3.curveMonotoneX)
+	    .x(function(d) { return x(d.date); })
+	    .y0(height)
+	    .y1(function(d) { return y(d.price); });
+*/
+
+
+
 			//append x axis to svg
       svg2.append("g")
         .attr("class", "x-axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(xScale))
+        .call(d3.axisBottom(x))
         .attr("yScale", 30)
         .attr("xScale", 800)
         .attr("font-size", "8px")
@@ -557,16 +596,112 @@ var svg2 = d3.select("div#chartId2")
       svg2.append("g")
         .attr("transform", "translate(100,0)")
         .attr("class", "y-axis")
-        .call(d3.axisLeft(yScale))
+        .call(d3.axisLeft(y))
+    
+    svg2.append("path")
+      .data([data])
+      .attr("class", "line")
+      .attr("d", valueline);
+  
+    
+		
+    svg2.selectAll(".coordinate")
+    .data(projectPerMonthStates)
+    .enter()
+    .append("circle")
+    .attr("cx", function(d)
+    { 
+    	return margin.Left + y(d.values[1].value);
+    })
+    .attr("cy", function(d)
+    {
+    	/* var totalAmountofProjects = d.values[1].value; */
+    	if(d.values[1].key == "true"){
+    	return y(d.values[1].value);
+    	}
+    	else{
+	    	return y(d.values[0].value);
+    	}
+    	;
+    	
+    
+    })
+    
+  /*   y(function(d){d.main_categ}) */
+/*   	.attr("x","50") */
+    .attr("r","6")
+    /* .attr("width","10px") */
+    .style("background","blue")
+    
+    /* .text(function(d){return d.values[1].value;}) */
+    ;
+    
+
+    
+    
+    
+        
+    svg2.append("defs").append("clipPath")
+    .attr("id", "clip")
+		.append("rect")
+    .attr("width", width)
+    .attr("height", height);
         
         
         
+        
+/*
       var line = d3.line()
-					
         .x(function(d){return d.key;})
-        .y(function(d){d.values;})
+        .y(projectCount)
         ;
+*/
         
+        
+        
+ /*
+
+       var xBrushScale = xScale = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
+				var yBrushScale = d3.scaleLinear().range([height+50, 0]);
+				
+				
+				var xAxis2 = d3.axisBottom(xBrushScale)
+				
+				xBrushScale.domain(xScale.domain);
+				
+				
+				
+				var context = svg.append("g")
+    .attr("class", "context")
+    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+				
+				context.append("g")
+      .attr("class", "axis axis--x")
+      .attr("transform", "translate(0," + height2 + ")")
+      .call(xAxis2);
+				
+*/
+
+				
+/*
+				var brush = d3.brushX()
+			 .extent([[0, 0], [width, height+50]])
+			 .on("brush end", brushed);
+        
+			        function brushed() {
+			  if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+			  var s = d3.event.selection || x2.range();
+			  x.domain(s.map(x2.invert, x2));
+			  focus.select(".area").attr("d", area);
+			  focus.select(".axis--x").call(xAxis);
+			  svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
+			      .scale(width / (s[1] - s[0]))
+			      .translate(-s[0], 0));
+			}
+			
+*/
+			
+			
 
 }
 
