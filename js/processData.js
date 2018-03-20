@@ -15,6 +15,8 @@
       var width = 800;
       var height = 500;
 
+      var successChart;
+
       //count number of projects in each main category in each in nest
       var mainCatCount = d3.nest()
         .key(function(d) {
@@ -113,54 +115,6 @@
         })
         .entries(data);
 
-
-      //         var test = d3.nest()
-      //           .key(function(d) {
-      //             return d.main_category;
-      //           })
-      //           .key(function(d) {
-      //             return d.state;
-      //           })
-      //
-      //           .key(function(d) {
-      //             return d.state;
-      //           }).length
-      //
-      //           .rollup(function(v) { return d3.sum(v, function(d) { return d.state; }); })
-      // .object(statel);
-      //
-      //                     // ,
-      //                     //
-      //                     // JP_Sales : d3.sum(v, function (d) {
-      //                     //     return d["JP_Sales"];
-      //                     // }),
-      //                     //
-      //                     // NA_Sales : d3.sum(v, function (d) {
-      //                     //     return d["NA_Sales"];
-      //                     // }),
-      //                     // Other_Sales : d3.sum(v, function (d) {
-      //                     //     return d["Other_Sales"];
-      //                     // }),
-      //                     // Global_Sales : d3.sum(v, function (d) {
-      //                     //     return d["Global_Sales"];
-      //                     // })
-      //
-      //           //       };
-      //           // })
-      //           //.entries(data);
-      //
-      //           console.log(statel);
-
-      /*
-      	   var line = d3.svg.line()
-      	   	.xScale2(monthNames)
-      	   	.yScale2(projectCountMax)
-      	   	.interpolate("linear")
-      	   	;
-      */
-
-
-
       //change type of data if needed (for later)
       data.forEach(function(d) {
         d.main_category = d.main_category;
@@ -237,26 +191,11 @@
           .attr("height", yScale.bandwidth())
 
           .on("click", function(d) {
-            var highlightkey = d.key;
-            console.log(d.key)
-
-
+            successChart = 1;
             graph2(d.key);
-
-
             document.getElementById("chartId2").style.display = "block";
-            if (highlightkey == "Fashion") {
-              console.log("we did it!")
-            }
-
-            if (highlightkey == "Technology") {
-              console.log("tech time!~")
-            }
-
-
-
-
           })
+
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
             div.transition()
@@ -299,20 +238,10 @@
 
 
           .on("click", function(d) {
-            var highlightkey = d.key;
-            console.log(d.key)
-
-            if (highlightkey == "Fashion") {
-              console.log("we did it!")
-              this
-            }
-
-            if (highlightkey == "Technology") {
-              console.log("tech time!~")
-            }
-
-
-
+            //var highlightkey = d.key;
+            successChart = 0;
+            graph2(d.key);
+            document.getElementById("chartId2").style.display = "block";
           })
 
           //add tool-tip function to show value when hover
@@ -378,34 +307,38 @@
 
         var sortBars = function() {
 
-          var sortScale=  mainCatCount.sort(function(a, b) {
-              return b.value - a.value;
-            }).map(function(d) {
-              return d['key'];
-            });
-              console.log(sortScale)
+          var sortScale = mainCatCount.sort(function(a, b) {
+            return b.value - a.value;
+          }).map(function(d) {
+            return d['key'];
+          });
+          console.log(sortScale)
           yScale.domain(sortScale);
 
           svg.selectAll(".bar")
-          .sort(function(a,b){ return yScale(a.key) - yScale(b.key)});
+            .sort(function(a, b) {
+              return yScale(a.key) - yScale(b.key)
+            });
 
-            svg.selectAll(".bar")    .transition()
+          svg.selectAll(".bar").transition()
             .attr("y", function(d) {
 
               return yScale(d.key);
             })
 
-            svg.selectAll(".bar2")
-            .sort(function(a,b){ return yScale(a.key) - yScale(b.key)});
+          svg.selectAll(".bar2")
+            .sort(function(a, b) {
+              return yScale(a.key) - yScale(b.key)
+            });
 
-              svg.selectAll(".bar2")    .transition()
-              .attr("y", function(d) {
+          svg.selectAll(".bar2").transition()
+            .attr("y", function(d) {
 
-                return yScale(d.key);
-              })
+              return yScale(d.key);
+            })
 
-              svg.selectAll(".baryaxis")
-              .call(d3.axisLeft(yScale))
+          svg.selectAll(".baryaxis")
+            .call(d3.axisLeft(yScale))
 
 
         };
@@ -430,9 +363,11 @@
             bar.active = active;
 
             if (active == true) {
-                      d3.selectAll(".bar2").attr("x", function (d){ return xScale(0); })
+              d3.selectAll(".bar2").attr("x", function(d) {
+                return xScale(0);
+              })
             } else {
-                  d3.selectAll(".bar2").attr("x", function(d) {
+              d3.selectAll(".bar2").attr("x", function(d) {
                 var totalSuccessCheck = d.values[1].value;
                 return xScale(totalSuccessCheck);
               })
@@ -592,22 +527,15 @@
 
 
 
-console.log(" projeect per month states ");
+        console.log(" projeect per month states ");
         console.log(projectPerMonthStates);
 
 
 
 
         //define scales
-        /* x = d3.scaleLinear(), */
-        /* 	xScale2 = d3.scaleLinear().range([0,width]), */
         var xScale2 = d3.scalePoint();
-
-        /* xScale2 = d3.scaleBand().rangeRound([width, 0]).padding(0.1); */
-        /*  y = d3.scaleBand().rangeRound([height, 0]).padding(0.2); */
         var yScale2 = d3.scaleLinear().range([height, 0]);
-
-
 
         var valueline = d3.line()
           .x(function(d) {
@@ -617,8 +545,6 @@ console.log(" projeect per month states ");
             return yScale2(d.pledged);
           });
 
-
-
         xScale2.domain(monthNames)
           .range([margin.left, width]);
 
@@ -626,7 +552,7 @@ console.log(" projeect per month states ");
           .range([height, 10]);
 
 
-d3.select("div#chartId2").selectAll("div").remove();
+        d3.select("div#chartId2").selectAll("div").remove();
 
         var svg2 = d3.select("div#chartId2")
           .append("div")
@@ -665,12 +591,6 @@ d3.select("div#chartId2").selectAll("div").remove();
           .attr("class", "y-axis")
           .call(d3.axisLeft(yScale2))
 
-        // svg2.append("path")
-        //   .data(data)
-        //   .attr("class", "line")
-        //   .attr("d", valueline);
-
-
 
         circles = svg2.selectAll("circle.coordinate")
           .data(projectPerMonthStates)
@@ -678,38 +598,33 @@ d3.select("div#chartId2").selectAll("div").remove();
           .append("circle")
           .attr("class", "coordinate")
           .attr("cx", function(d) {
-          console.log(d.key  +  "  in text "+monthNames[d.key -1])
+            console.log(d.key + "  in text " + monthNames[d.key - 1])
 
-            return xScale2(monthNames[d.key -1]);
+            return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-            return yScale2(d.values[1].value);
-
-            /* var totalAmountofProjects = d.values[1].value; */
-            // if(d.values[1].key == "true"){
-            // return yScale2(d.values[1].value);
-            // }
-            // else{
-            // 	return yScale2(d.values[0].value);
-            // }
-            // ;
-
-
+            if (successChart == 1) {
+              return yScale2(d.values[1].value);
+            } else {
+              console.log(d.values[0].value)
+              return yScale2(d.values[0].value);
+            }
           })
-
-          /*   y(function(d){d.main_categ}) */
-          /*   	.attr("x","50") */
           .attr("r", "6")
-          /* .attr("width","10px") */
-          .style("fill", "blue")
+          .style("fill", function(d) {
+            if (successChart == 1) {
+              return ("green");
+            } else {
+              return ("red");
+            }
 
-        /* .text(function(d){return d.values[1].value;}) */
-        ;
+          });
 
-
-
-
-
+        // if (successChart == 1) { // Hide or show the elements
+        //   d3.selectAll(".circlesSuccess").style("opacity", newOpacity);
+        //   // Update whether or not the elements are active
+        //   circlesSuccess.activeS = activeS;
+        // }
 
         svg2.append("defs").append("clipPath")
           .attr("id", "clip")
@@ -720,12 +635,12 @@ d3.select("div#chartId2").selectAll("div").remove();
 
 
 
-        /*
-              var line = d3.line()
-                .x(function(d){return d.key;})
-                .y(projectCount)
-                ;
-        */
+
+        // var line = d3.line()
+        //   .x(function(d){return d.key;})
+        //   .y(projectCount)
+        //   ;
+
 
 
 
