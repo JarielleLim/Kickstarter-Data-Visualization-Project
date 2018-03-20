@@ -54,8 +54,6 @@
       console.log(monthParse);
 
 
-
-
       var months = new Array();
       for (i = 0; i < monthParse.length; i++) {
         months.push(monthParse[i]["key"]);
@@ -67,9 +65,6 @@
 
       var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       console.log(monthNames[parseInt(sortMonths[0]) - 1]);
-
-
-
 
 
       //pushing "value" from d3 nest into an array
@@ -190,6 +185,7 @@
           })
           .attr("height", yScale.bandwidth())
 
+          //when graph is clicked, show graph 2 showing specific data to the category clicked on
           .on("click", function(d) {
             successChart = 1;
             graph2(d.key);
@@ -305,16 +301,23 @@
           .style("text-anchor", "middle")
           .text("# of Projects Per Category");
 
+        //function to sort the order of the bars by descending order
         var sortBars = function() {
 
+          //sort the mainCatCount by descending order, returning only # of success/failures
           var sortScale = mainCatCount.sort(function(a, b) {
-            return b.value - a.value;
-          }).map(function(d) {
-            return d['key'];
-          });
+              return b.value - a.value;
+            })
+            .map(function(d) {
+              return d['key'];
+            });
+
           console.log(sortScale)
+
+          //resets yScale domain based on sort order
           yScale.domain(sortScale);
 
+          //redraws bar in sorted position
           svg.selectAll(".bar")
             .sort(function(a, b) {
               return yScale(a.key) - yScale(b.key)
@@ -322,7 +325,6 @@
 
           svg.selectAll(".bar").transition()
             .attr("y", function(d) {
-
               return yScale(d.key);
             })
 
@@ -343,14 +345,15 @@
 
         };
 
+        //when clicked, run function sortBars
         d3.select("#sort").on("click", sortBars);
 
-        // Add the blue line title
+        // Add the "success" text to show/hide data
         svg.append("text")
-          .attr("x", 0)
-          .attr("y", height + margin.top + 10)
+          .attr("x", width - margin.right)
+          .attr("y", margin.top)
           .attr("class", "button")
-          .style("fill", "steelblue")
+          .style("fill", "rgb(143, 226, 133)")
           .on("click", function() {
             // Determine if current line is visible
             var active = bar.active ? false : true,
@@ -359,6 +362,7 @@
 
             // Hide or show the elements
             d3.selectAll(".bar").style("opacity", newOpacity);
+
             // Update whether or not the elements are active
             bar.active = active;
 
@@ -375,12 +379,62 @@
           })
           .text("Success");
 
-        // Add the red line title
+
+        svg.append("rect")
+          .attr("x", width - margin.right - 30)
+          .attr("y", margin.top - 15)
+          .attr("class", "legendSquare")
+          .attr("width", "20")
+          .attr("height", "20")
+          .on("click", function() {
+            // Determine if current line is visible
+            var active = bar.active ? false : true,
+              newOpacity = active ? 0 : 1;
+
+
+            // Hide or show the elements
+            d3.selectAll(".bar").style("opacity", newOpacity);
+
+            // Update whether or not the elements are active
+            bar.active = active;
+
+            if (active == true) {
+              d3.selectAll(".bar2").attr("x", function(d) {
+                return xScale(0);
+              })
+            } else {
+              d3.selectAll(".bar2").attr("x", function(d) {
+                var totalSuccessCheck = d.values[1].value;
+                return xScale(totalSuccessCheck);
+              })
+            }
+          })
+          .style("fill", "rgb(143, 226, 133)");
+
+
+        svg.append("rect")
+          .attr("x", width - margin.right - 30)
+          .attr("y", margin.top + 13)
+          .attr("class", "legendSquare")
+          .attr("width", "20")
+          .attr("height", "20")
+          .on("click", function() {
+            // Determine if current line is visible
+            var active = bar2.active ? false : true,
+              newOpacity = active ? 0 : 1;
+            // Hide or show the elements
+            d3.selectAll(".bar2").style("opacity", newOpacity);
+            // Update whether or not the elements are active
+            bar2.active = active;
+          })
+          .style("fill", "rgb(186, 42, 85)");
+
+        // Add the "failed" text to show/hide data
         svg.append("text")
-          .attr("x", 0)
-          .attr("y", height + margin.top + 30)
+          .attr("x", width - margin.right)
+          .attr("y", margin.top + 30)
           .attr("class", "button")
-          .style("fill", "red")
+          .style("fill", "rgb(186, 42, 85)")
           .on("click", function() {
             // Determine if current line is visible
             var active = bar2.active ? false : true,
@@ -392,25 +446,23 @@
           })
           .text("Failed");
 
-
-        //create legend for bar (http://d3-legend.susielu.com)
-        var ordinal = d3.scaleOrdinal()
-          .domain(["success", "failure"])
-          .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
-
-        var svg = d3.select("svg");
-
-        svg.append("g")
-          .attr("class", "legendOrdinal")
-          .attr("transform", "translate(" + (width - 70) + " ,50)");
-
-        var legendOrdinal = d3.legendColor()
-          .shape("path", d3.symbol().type(d3.symbolSquare).size(200)())
-          .shapePadding(10)
-          .scale(ordinal);
-
-        svg.select(".legendOrdinal")
-          .call(legendOrdinal);
+        //   //create legend for bar (http://d3-legend.susielu.com)
+        //   var ordinal = d3.scaleOrdinal()
+        //     .domain(["success", "failure"])
+        //     .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
+        //
+        //
+        //   svg.append("g")
+        //     .attr("class", "legendOrdinal")
+        //     .attr("transform", "translate(" + (width - 70) + " ,50)");
+        //
+        //   var legendOrdinal = d3.legendColor()
+        //     .shape("path", d3.symbol().type(d3.symbolSquare).size(200)())
+        //     .shapePadding(10)
+        //     .scale(ordinal);
+        //
+        //   svg.select(".legendOrdinal")
+        //     .call(legendOrdinal);
       }
 
       //function calling
@@ -512,14 +564,6 @@
             return d.main_category == selection;
           })
 
-
-
-          /*
-   .key(function(d) {
-          return d.state;
-        })
-*/
-
           .rollup(function(v) {
             return v.length;
           })
@@ -527,7 +571,7 @@
 
 
 
-        console.log(" projeect per month states ");
+        console.log(" project per month states ");
         console.log(projectPerMonthStates);
 
 
@@ -591,6 +635,22 @@
           .attr("class", "y-axis")
           .call(d3.axisLeft(yScale2))
 
+        //label for y axis: kickstarter main categories
+        svg2.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("x", 0 - (height / 2))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text("Number of Projects");
+
+        //label for x axis: # of Project Per Category
+        svg2.append("text")
+          .attr("transform",
+            "translate(" + (width / 2 + 30) + " ," +
+            (height + margin.top + 30) + ")")
+          .style("text-anchor", "middle")
+          .text("Month created");
 
         circles = svg2.selectAll("circle.coordinate")
           .data(projectPerMonthStates)
@@ -613,9 +673,9 @@
           .attr("r", "6")
           .style("fill", function(d) {
             if (successChart == 1) {
-              return ("green");
+              return ("rgb(143, 226, 133)");
             } else {
-              return ("red");
+              return ("rgb(186, 42, 85)");
             }
 
           });
@@ -631,6 +691,7 @@
           .append("rect")
           .attr("width", width)
           .attr("height", height);
+
 
 
 
