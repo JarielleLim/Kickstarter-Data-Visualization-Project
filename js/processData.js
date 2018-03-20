@@ -189,7 +189,7 @@
 
           //when graph is clicked, show graph 2 showing specific data to the category clicked on
           .on("click", function(d) {
-            successChart = 1;
+            /* successChart = 1; */
             graph2(d.key);
             document.getElementById("chartId2").style.display = "block";
           })
@@ -237,7 +237,7 @@
 
           .on("click", function(d) {
             //var highlightkey = d.key;
-            successChart = 0;
+     /*        successChart = 0; */
             graph2(d.key);
             document.getElementById("chartId2").style.display = "block";
           })
@@ -569,10 +569,6 @@
 					.key(function(d) {
             return d.state;
           })
-						
-      
-          
-     
 
           .rollup(function(v) {
             return v.length;
@@ -673,35 +669,52 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-            if (successChart == 1) {
+     
               return yScale2(d.values[1].values[1].value);
-            } else {
-             /*  console.log(d.values[0].value) */
-              return yScale2(d.values[1].values[0].value);
-            }
-          })
+       })
+          .transition()	
           
           
-          .text(function(d) {
-            if (successChart == 1) {
-             /* console.log(d.values[1].values[1].value); */
-            
-              return d.values[1].values[1].value;
-             
-            } else {
-              /* console.log(d.values[0].values[0].value) */
-              return d.values[1].values[0].value;
-            }
-          })
+   
           .attr("r", "6")
           .style("fill", function(d) {
-            if (successChart == 1) {
+           
               return ("rgb(143, 226, 133)");
-            } else {
-              return ("rgb(186, 42, 85)");
-            }
+     
 
           });
+
+
+					 circles2 = svg2.selectAll("circle.coordinate2")
+          .data(projectPerMonthStates)
+          .enter()
+          .append("circle")
+          .attr("class", "coordinate2")
+          .attr("cx", function(d) {
+            console.log(d.key + "  in text " + monthNames[d.key - 1])
+
+            return xScale2(monthNames[d.key - 1]);
+          })
+          .attr("cy", function(d) {
+         
+             /*  console.log(d.values[0].value) */
+              return yScale2(d.values[1].values[0].value);
+            
+          })
+          .transition()	
+          
+          
+          
+          .attr("r", "6")
+          .style("fill", function(d) {
+           
+              return ("rgb(186, 42, 85)");
+          
+
+          });
+
+
+
 
         // if (successChart == 1) { // Hide or show the elements
         //   d3.selectAll(".circlesSuccess").style("opacity", newOpacity);
