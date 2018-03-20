@@ -109,6 +109,8 @@
           return v.length;
         })
         .entries(data);
+        
+        
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -560,9 +562,17 @@
             return d.launched.split("-")[1];
           })
 
-          .key(function(d) {
+					 .key(function(d) {
             return d.main_category == selection;
           })
+
+					.key(function(d) {
+            return d.state;
+          })
+						
+      
+          
+     
 
           .rollup(function(v) {
             return v.length;
@@ -664,10 +674,23 @@
           })
           .attr("cy", function(d) {
             if (successChart == 1) {
-              return yScale2(d.values[1].value);
+              return yScale2(d.values[1].values[1].value);
             } else {
-              console.log(d.values[0].value)
-              return yScale2(d.values[0].value);
+             /*  console.log(d.values[0].value) */
+              return yScale2(d.values[1].values[0].value);
+            }
+          })
+          
+          
+          .text(function(d) {
+            if (successChart == 1) {
+             /* console.log(d.values[1].values[1].value); */
+            
+              return d.values[1].values[1].value;
+             
+            } else {
+              /* console.log(d.values[0].values[0].value) */
+              return d.values[1].values[0].value;
             }
           })
           .attr("r", "6")
