@@ -109,8 +109,8 @@
           return v.length;
         })
         .entries(data);
-        
-        
+
+
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -431,7 +431,7 @@
       //function calling
       graph1();
 
-	
+
 
       function graph2(selection) {
         var xdim = 'Critic_Score';
@@ -587,6 +587,18 @@
         	    .y1(function(d) { return y(d.price); });
         */
 
+        //label for current graph shown
+        svg2.append("text")
+          //.attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("x", margin.left + 50)
+          .attr("dy", "1em")
+          .attr("class", "graphTitle")
+          .style("font-size", "24px")
+          .style("color", "#3ea057")
+          .text(selection);
+
+        console.log(selection);
 
 
         //append x axis for months to svg
@@ -642,7 +654,7 @@
               	}
               }
               else {
-              
+
               	if(d.values[0].values[0].key == "successful") {
 									return yScale2(d.values[0].values[0].value);
               	}
@@ -652,15 +664,15 @@
 	              return yScale2(d.values[0].values[0].value);
               }
        })
-          .transition()	
-          
-          
-   
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
+
               return ("rgb(143, 226, 133)");
-     
+
 
           });
 
@@ -676,7 +688,7 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-          
+
           	if(d.values[1].key == "true") {
 								if(d.values[1].values[0].key == "failed") {
 									return yScale2(d.values[1].values[0].value);
@@ -686,7 +698,7 @@
               	}
               }
               else {
-              
+
               	if(d.values[0].values[0].key == "failed") {
 									return yScale2(d.values[0].values[0].value);
               	}
@@ -695,20 +707,20 @@
               	}
 	              return yScale2(d.values[0].values[0].value);
               }
-         
+
              /*  console.log(d.values[0].value) */
              /*  return yScale2(d.values[1].values[1].value); */
-            
+
           })
-          .transition()	
-          
-          
-          
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
+
               return ("rgb(186, 42, 85)");
-          
+
 
           });
 
@@ -735,7 +747,7 @@
 
 
 
-			
+
 
 
     });
@@ -744,16 +756,16 @@
 				//hover to show success nodes only
 			function filterSuccess(){
 			d3.select("div#chartId2").selectAll("circle.failed").style("opacity","0.2");
-				
+
 			}
-			
+
 			//hover out show normal state
 			function backToNormal(){
 					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1");
 					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1");
 			}
-			
-			
+
+
 			//hover to show failed nodes only
 			function filterFailed(){
 /*
