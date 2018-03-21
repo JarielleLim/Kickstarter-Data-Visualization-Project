@@ -192,6 +192,7 @@
             /* successChart = 1; */
             graph2(d.key);
             document.getElementById("chartId2").style.display = "block";
+            document.getElementById("brush-tool").style.display = "block";
           })
 
           //add tool-tip function to show value when hover
@@ -238,8 +239,12 @@
           .on("click", function(d) {
             //var highlightkey = d.key;
      /*        successChart = 0; */
-            graph2(d.key);
+     				var highlightkey = d.key;
+            graph2(highlightkey);
+            console.log(highlightkey);
+
             document.getElementById("chartId2").style.display = "block";
+            document.getElementById("brush-tool").style.display = "block";
           })
 
           //add tool-tip function to show value when hover
@@ -669,8 +674,24 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-     
-              return yScale2(d.values[1].values[1].value);
+							if(d.values[1].key == "true") {
+								if(d.values[1].values[0].key == "successful") {
+									return yScale2(d.values[1].values[0].value);
+              	}
+              	else{
+	              		return yScale2(d.values[1].values[1].value);
+              	}
+              }
+              else {
+              
+              	if(d.values[0].values[0].key == "successful") {
+									return yScale2(d.values[0].values[0].value);
+              	}
+              	else{
+	              		return yScale2(d.values[0].values[1].value);
+              	}
+	              return yScale2(d.values[0].values[0].value);
+              }
        })
           .transition()	
           
@@ -696,9 +717,28 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
+          
+          	if(d.values[1].key == "true") {
+								if(d.values[1].values[0].key == "failed") {
+									return yScale2(d.values[1].values[0].value);
+              	}
+              	else{
+	              		return yScale2(d.values[1].values[1].value);
+              	}
+              }
+              else {
+              
+              	if(d.values[0].values[0].key == "failed") {
+									return yScale2(d.values[0].values[0].value);
+              	}
+              	else{
+	              		return yScale2(d.values[0].values[1].value);
+              	}
+	              return yScale2(d.values[0].values[0].value);
+              }
          
              /*  console.log(d.values[0].value) */
-              return yScale2(d.values[1].values[0].value);
+             /*  return yScale2(d.values[1].values[1].value); */
             
           })
           .transition()	

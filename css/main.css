@@ -136,3 +136,17 @@ font-size: 2em;
   fill: steelblue;
   clip-path: url(#clip);
 }
+
+#brush-tool {
+	display:none;
+}
+
+#brush-tool span{
+	margin-left:25px;
+	color:blue;
+}
+
+#brush-tool  span:hover{
+	color:red;
+	
+}
