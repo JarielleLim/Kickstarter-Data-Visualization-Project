@@ -197,10 +197,16 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
+          	if(d.values[1].key == "successful"){
+          		var successNo = d.values[1].value; 
+          	}
+          	else{
+	          	var successNo = d.values[0].value; 
+          	}
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.text(d.values[1].value)
+            div.text(successNo)
               .style("left", (d3.event.pageX + d.values.length) + "px")
               .style("top", (d3.event.pageY) + "px");
           })
@@ -214,8 +220,12 @@
           .duration(500)
           //calculate width of bar based on success value in each category
           .attr("width", function(d) {
-            var totalSuccess = d.values[1].value;
-            return xScale(totalSuccess) - margin.left
+           if(d.values[1].key == "successful"){
+	          	return xScale(d.values[1].value) - margin.left;
+          	}
+          	else{
+	          	return xScale(d.values[0].value) - margin.left;
+          	}
           });
 
 
@@ -231,8 +241,19 @@
           //calculate width of bar based on success value in each category
           //to find starting position for graph
           .attr("x", function(d) {
-            var totalSuccessCheck = d.values[1].value;
+   /*
+        var totalSuccessCheck = d.values[1].value;
             return xScale(totalSuccessCheck);
+*/
+            
+            if(d.values[1].key == "successful"){
+	          	return xScale(d.values[1].value);
+          	}
+          	else{
+	          	return xScale(d.values[0].value);
+          	}
+            
+            
           })
 
 
@@ -249,10 +270,16 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
+          	if(d.values[0].key == "failed"){
+          	var failedNo = d.values[0].value; 
+          	}
+          	else{
+	          	var failedNo = d.values[1].value; 
+          	}
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.text(d.values[0].value)
+            div.text(failedNo)
               .style("left", (d3.event.pageX) + "px")
               .style("top", (d3.event.pageY) + "px");
           })
@@ -273,8 +300,18 @@
 
           //calculate width of bar based on failed value in each category
           .attr("width", function(d) {
-            var totalFailed = d.values[0].value
+           /*
+ var totalFailed = d.values[0].value
             return xScale(totalFailed) - margin.left;
+*/
+				    if(d.values[0].key == "failed"){
+	          	return xScale(d.values[0].value) - margin.left;
+          	}
+          	else{
+	          	return xScale(d.values[1].value) - margin.left;
+          	}
+
+
           });
 
         //append x axis to svg
@@ -645,6 +682,8 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
+							
+						
 							if(d.values[1].key == "true") {
 								if(d.values[1].values[0].key == "successful") {
 									return yScale2(d.values[1].values[0].value);
@@ -653,16 +692,18 @@
 	              		return yScale2(d.values[1].values[1].value);
               	}
               }
+              
+					
               else {
 
               	if(d.values[0].values[0].key == "successful") {
 									return yScale2(d.values[0].values[0].value);
               	}
-              	else{
+              	else {
 	              		return yScale2(d.values[0].values[1].value);
               	}
-	              return yScale2(d.values[0].values[0].value);
-              }
+	             
+             }
        })
           .transition()
 
