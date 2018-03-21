@@ -109,8 +109,8 @@
           return v.length;
         })
         .entries(data);
-        
-        
+
+
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -197,12 +197,11 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
-          	if(d.values[1].key == "successful"){
-          		var successNo = d.values[1].value; 
-          	}
-          	else{
-	          	var successNo = d.values[0].value; 
-          	}
+            if (d.values[1].key == "successful") {
+              var successNo = d.values[1].value;
+            } else {
+              var successNo = d.values[0].value;
+            }
             div.transition()
               .duration(200)
               .style("opacity", .9);
@@ -220,12 +219,11 @@
           .duration(500)
           //calculate width of bar based on success value in each category
           .attr("width", function(d) {
-           if(d.values[1].key == "successful"){
-	          	return xScale(d.values[1].value) - margin.left;
-          	}
-          	else{
-	          	return xScale(d.values[0].value) - margin.left;
-          	}
+            if (d.values[1].key == "successful") {
+              return xScale(d.values[1].value) - margin.left;
+            } else {
+              return xScale(d.values[0].value) - margin.left;
+            }
           });
 
 
@@ -241,26 +239,19 @@
           //calculate width of bar based on success value in each category
           //to find starting position for graph
           .attr("x", function(d) {
-   /*
-        var totalSuccessCheck = d.values[1].value;
-            return xScale(totalSuccessCheck);
-*/
-            
-            if(d.values[1].key == "successful"){
-	          	return xScale(d.values[1].value);
-          	}
-          	else{
-	          	return xScale(d.values[0].value);
-          	}
-            
-            
+            if (d.values[1].key == "successful") {
+              return xScale(d.values[1].value);
+            } else {
+              return xScale(d.values[0].value);
+            }
+
           })
 
 
           .on("click", function(d) {
             //var highlightkey = d.key;
-     /*        successChart = 0; */
-     				var highlightkey = d.key;
+            /*        successChart = 0; */
+            var highlightkey = d.key;
             graph2(highlightkey);
             console.log(highlightkey);
 
@@ -270,12 +261,11 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
-          	if(d.values[0].key == "failed"){
-          	var failedNo = d.values[0].value; 
-          	}
-          	else{
-	          	var failedNo = d.values[1].value; 
-          	}
+            if (d.values[0].key == "failed") {
+              var failedNo = d.values[0].value;
+            } else {
+              var failedNo = d.values[1].value;
+            }
             div.transition()
               .duration(200)
               .style("opacity", .9);
@@ -300,16 +290,15 @@
 
           //calculate width of bar based on failed value in each category
           .attr("width", function(d) {
-           /*
+            /*
  var totalFailed = d.values[0].value
             return xScale(totalFailed) - margin.left;
 */
-				    if(d.values[0].key == "failed"){
-	          	return xScale(d.values[0].value) - margin.left;
-          	}
-          	else{
-	          	return xScale(d.values[1].value) - margin.left;
-          	}
+            if (d.values[0].key == "failed") {
+              return xScale(d.values[0].value) - margin.left;
+            } else {
+              return xScale(d.values[1].value) - margin.left;
+            }
 
 
           });
@@ -345,7 +334,52 @@
           .style("text-anchor", "middle")
           .text("# of Projects Per Category");
 
-        //function to sort the order of the bars by descending order
+        //sort the mainCatCount by descending order, returning only # of success/failures
+        var sortBars = function() {
+
+
+
+          var sortScale = mainCatCount.sort(function(a, b) {
+
+            return b.value - a.value;
+
+          }).map(function(d) {
+
+            return d['key'];
+
+          });
+          console.log(sortScale)
+
+          yScale.domain(sortScale);
+
+          svg.selectAll(".bar")
+
+            .sort(function(a, b) {
+              return yScale(a.key) - yScale(b.key)
+            });
+
+          svg.selectAll(".bar").transition()
+
+            .attr("y", function(d) {
+
+              return yScale(d.key);
+
+            })
+          svg.selectAll(".bar2")
+
+            .sort(function(a, b) {
+              return yScale(a.key) - yScale(b.key)
+            });
+          svg.selectAll(".bar2").transition()
+            .attr("y", function(d) {
+              return yScale(d.key);
+            })
+
+          svg.selectAll(".baryaxis")
+
+            .call(d3.axisLeft(yScale))
+        };
+        d3.select("#sort").on("click", sortBars);
 
 
         // Add the "success" text to show/hide data
@@ -376,12 +410,11 @@
 var totalSuccessCheck = d.values[1].value;
                 return xScale(totalSuccessCheck);
 */
-								 if(d.values[1].key == "successful"){
-			          	return xScale(d.values[1].value);
-		          	}
-		          	else{
-			          	return xScale(d.values[0].value);
-		          	}
+                if (d.values[1].key == "successful") {
+                  return xScale(d.values[1].value);
+                } else {
+                  return xScale(d.values[0].value);
+                }
 
 
               })
@@ -414,17 +447,16 @@ var totalSuccessCheck = d.values[1].value;
               })
             } else {
               d3.selectAll(".bar2").attr("x", function(d) {
-               /*
+                /*
  var totalSuccessCheck = d.values[1].value;
                 return xScale(totalSuccessCheck);
 */
-		
-								if(d.values[1].key == "successful"){
-			          	return xScale(d.values[1].value);
-		          	}
-		          	else{
-			          	return xScale(d.values[0].value);
-		          	}
+
+                if (d.values[1].key == "successful") {
+                  return xScale(d.values[1].value);
+                } else {
+                  return xScale(d.values[0].value);
+                }
               })
             }
           })
@@ -487,7 +519,7 @@ var totalSuccessCheck = d.values[1].value;
       //function calling
       graph1();
 
-	
+
 
       function graph2(selection) {
         var xdim = 'Critic_Score';
@@ -557,20 +589,20 @@ var totalSuccessCheck = d.values[1].value;
 
 
         //create array for category goals
-/*
-        var catGoalArray = new Array();
-        for (i = 0; i < catGoal[1]["values"].length; i++) {
-          if (catGoal[1]["key"] == "true") {
-            catGoalArray.push(catGoal[1]["values"][i]["key"]);
-          } else {
-            catGoalArray.push(catGoal[0]["values"][i]["key"]);
-          }
-        }
-        console.log(catGoalArray);
-*/
+        /*
+                var catGoalArray = new Array();
+                for (i = 0; i < catGoal[1]["values"].length; i++) {
+                  if (catGoal[1]["key"] == "true") {
+                    catGoalArray.push(catGoal[1]["values"][i]["key"]);
+                  } else {
+                    catGoalArray.push(catGoal[0]["values"][i]["key"]);
+                  }
+                }
+                console.log(catGoalArray);
+        */
 
         //get max value
-/*         var maxGoal = d3.max(catGoalArray); */
+        /*         var maxGoal = d3.max(catGoalArray); */
 
 
 
@@ -582,11 +614,11 @@ var totalSuccessCheck = d.values[1].value;
             return d.launched.split("-")[1];
           })
 
-					 .key(function(d) {
+          .key(function(d) {
             return d.main_category == selection;
           })
 
-					.key(function(d) {
+          .key(function(d) {
             return d.state;
           })
 
@@ -689,42 +721,37 @@ var totalSuccessCheck = d.values[1].value;
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-					
-							if(d.values[1].key == "true") {
-								if(d.values[1].values[0].key == "successful") {
-									return yScale2(d.values[1].values[0].value);
-              	}
-              	else{
-	              		return yScale2(d.values[1].values[1].value);
-              	}
+
+            if (d.values[1].key == "true") {
+              if (d.values[1].values[0].key == "successful") {
+                return yScale2(d.values[1].values[0].value);
+              } else {
+                return yScale2(d.values[1].values[1].value);
               }
-              
-					
-              else {
-              
-              	if(d.values[0].values[0].key == "successful") {
-									return yScale2(d.values[0].values[0].value);
-              	}
-              	else {
-	              		return yScale2(d.values[0].values[1].value);
-              	}
-	             
-             }
-       })
-          .transition()	
-          
-          
-   
+            } else {
+
+              if (d.values[0].values[0].key == "successful") {
+                return yScale2(d.values[0].values[0].value);
+              } else {
+                return yScale2(d.values[0].values[1].value);
+              }
+
+            }
+          })
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
-              return ("rgb(143, 226, 133)");
-     
+
+            return ("rgb(143, 226, 133)");
+
 
           });
 
-					//created 2nd set of circles to show failed projects
-					 circles2 = svg2.selectAll("circle.coordinate2")
+        //created 2nd set of circles to show failed projects
+        circles2 = svg2.selectAll("circle.coordinate2")
           .data(projectPerMonthStates)
           .enter()
           .append("circle")
@@ -735,39 +762,36 @@ var totalSuccessCheck = d.values[1].value;
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-          
-          	if(d.values[1].key == "true") {
-								if(d.values[1].values[0].key == "failed") {
-									return yScale2(d.values[1].values[0].value);
-              	}
-              	else{
-	              		return yScale2(d.values[1].values[1].value);
-              	}
+
+            if (d.values[1].key == "true") {
+              if (d.values[1].values[0].key == "failed") {
+                return yScale2(d.values[1].values[0].value);
+              } else {
+                return yScale2(d.values[1].values[1].value);
               }
-              else {
-              
-              	if(d.values[0].values[0].key == "failed") {
-									return yScale2(d.values[0].values[0].value);
-              	}
-              	else{
-	              		return yScale2(d.values[0].values[1].value);
-              	}
-	              return yScale2(d.values[0].values[0].value);
+            } else {
+
+              if (d.values[0].values[0].key == "failed") {
+                return yScale2(d.values[0].values[0].value);
+              } else {
+                return yScale2(d.values[0].values[1].value);
               }
-         
-             /*  console.log(d.values[0].value) */
-             /*  return yScale2(d.values[1].values[1].value); */
-            
+              return yScale2(d.values[0].values[0].value);
+            }
+
+            /*  console.log(d.values[0].value) */
+            /*  return yScale2(d.values[1].values[1].value); */
+
           })
-          .transition()	
-          
-          
-          
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
-              return ("rgb(186, 42, 85)");
-          
+
+            return ("rgb(186, 42, 85)");
+
 
           });
 
@@ -794,49 +818,49 @@ var totalSuccessCheck = d.values[1].value;
 
 
 
-			
+
 
 
     });
 
 
-				//hover to show success nodes only
-			function filterSuccess(){
-			d3.select("div#chartId2")
-			.selectAll("circle.failed")
-			.style("opacity","0.2");
-			
-			
-				d3.select("div#chartId2")
-			 	.selectAll("circle.success")
-			 	.transition()
-			.attr("r", "10");
-				
-			}
-			
-			//hover out show normal state
-			function backToNormal(){
-					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1").attr("r", "6");
-					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1").attr("r", "6");
-			}
-			
-			
-			//hover to show failed nodes only
-			function filterFailed(){
-/*
-				var id = document.getElementById("chartId2");
-				id.getElementsByClassName("failed").style.opacity = "0.2";
-*/
-			 	d3.select("div#chartId2")
-			 	.selectAll("circle.success")
-			 	.style("opacity","0.2");
-			 	
-			 	d3.select("div#chartId2")
-			 	.selectAll("circle.failed")
-			 	.transition()
-			 	.attr("r", "10");
-				console.log("hello");
-			}
+    //hover to show success nodes only
+    function filterSuccess() {
+      d3.select("div#chartId2")
+        .selectAll("circle.failed")
+        .style("opacity", "0.2");
+
+
+      d3.select("div#chartId2")
+        .selectAll("circle.success")
+        .transition()
+        .attr("r", "10");
+
+    }
+
+    //hover out show normal state
+    function backToNormal() {
+      d3.select("div#chartId2").selectAll("circle.failed").style("opacity", "1").attr("r", "6");
+      d3.select("div#chartId2").selectAll("circle.success").style("opacity", "1").attr("r", "6");
+    }
+
+
+    //hover to show failed nodes only
+    function filterFailed() {
+      /*
+      				var id = document.getElementById("chartId2");
+      				id.getElementsByClassName("failed").style.opacity = "0.2";
+      */
+      d3.select("div#chartId2")
+        .selectAll("circle.success")
+        .style("opacity", "0.2");
+
+      d3.select("div#chartId2")
+        .selectAll("circle.failed")
+        .transition()
+        .attr("r", "10");
+      console.log("hello");
+    }
 
     // SOURCES
     //   tool-tips
