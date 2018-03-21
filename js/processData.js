@@ -135,6 +135,7 @@
         .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
 
 
+      //function to call first graph
       function graph1() {
 
         //define scales
@@ -144,7 +145,6 @@
         xScale.domain([0, maxNumberProject])
           .range([margin.left, width]);
 
-
         yScale.domain(catArray)
           .range([height, 10]);
 
@@ -153,14 +153,7 @@
           .attr("class", "tooltip")
           .style("opacity", 0);
 
-        // //append div for graph
-
-        // var svg = d3.select("#chartId")
-        //  .append("svg")
-        //  .attr("height", height + padding + margin)
-        //  .attr("width", width)
-        //  .attr("transform", "translate(100,0)");
-
+        //select first div in html to place first graph in
         var svg = d3.select("div#chartId")
           .append("div")
           .classed("svg-container", true) //container class to make it responsive
@@ -336,24 +329,16 @@
 
         //sort the mainCatCount by descending order, returning only # of success/failures
         var sortBars = function() {
-
-
-
           var sortScale = mainCatCount.sort(function(a, b) {
-
             return b.value - a.value;
-
           }).map(function(d) {
-
             return d['key'];
-
           });
-          console.log(sortScale)
 
+          console.log(sortScale)
           yScale.domain(sortScale);
 
           svg.selectAll(".bar")
-
             .sort(function(a, b) {
               return yScale(a.key) - yScale(b.key)
             });
@@ -361,15 +346,15 @@
           svg.selectAll(".bar").transition()
 
             .attr("y", function(d) {
-
               return yScale(d.key);
-
             })
+
           svg.selectAll(".bar2")
 
             .sort(function(a, b) {
               return yScale(a.key) - yScale(b.key)
             });
+
           svg.selectAll(".bar2").transition()
             .attr("y", function(d) {
               return yScale(d.key);
@@ -379,6 +364,7 @@
 
             .call(d3.axisLeft(yScale))
         };
+
         d3.select("#sort").on("click", sortBars);
 
 
@@ -406,22 +392,15 @@
               })
             } else {
               d3.selectAll(".bar2").attr("x", function(d) {
-                /*
-var totalSuccessCheck = d.values[1].value;
-                return xScale(totalSuccessCheck);
-*/
                 if (d.values[1].key == "successful") {
                   return xScale(d.values[1].value);
                 } else {
                   return xScale(d.values[0].value);
                 }
-
-
               })
             }
           })
           .text("Success");
-
 
         svg.append("rect")
           .attr("x", width - margin.right - 30)
@@ -434,11 +413,10 @@ var totalSuccessCheck = d.values[1].value;
             var active = bar.active ? false : true,
               newOpacity = active ? 0 : 1;
 
-
             // Hide or show the elements
             d3.selectAll(".bar").style("opacity", newOpacity);
 
-            // Update whether or not the elements are active
+            //Update whether or not the elements are active
             bar.active = active;
 
             if (active == true) {
@@ -447,11 +425,6 @@ var totalSuccessCheck = d.values[1].value;
               })
             } else {
               d3.selectAll(".bar2").attr("x", function(d) {
-                /*
- var totalSuccessCheck = d.values[1].value;
-                return xScale(totalSuccessCheck);
-*/
-
                 if (d.values[1].key == "successful") {
                   return xScale(d.values[1].value);
                 } else {
@@ -462,7 +435,7 @@ var totalSuccessCheck = d.values[1].value;
           })
           .style("fill", "rgb(143, 226, 133)");
 
-
+        //draw squares for legendColor
         svg.append("rect")
           .attr("x", width - margin.right - 30)
           .attr("y", margin.top + 13)
@@ -497,7 +470,7 @@ var totalSuccessCheck = d.values[1].value;
           })
           .text("Failed");
 
-        //   //create legend for bar (http://d3-legend.susielu.com)
+        //   //create legend for bar (http://d3-legend.susielu.com) old legend js
         //   var ordinal = d3.scaleOrdinal()
         //     .domain(["success", "failure"])
         //     .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
@@ -516,14 +489,13 @@ var totalSuccessCheck = d.values[1].value;
         //     .call(legendOrdinal);
       }
 
-      //function calling
+      //function calling to draw graph 1
       graph1();
 
 
-
+      //function to create graph 2
       function graph2(selection) {
-        var xdim = 'Critic_Score';
-        var ydim = 'User_Score';
+
         //projects that appear within each month
         var projectPerMonth = d3.nest()
 
@@ -544,7 +516,7 @@ var totalSuccessCheck = d.values[1].value;
 
         console.log(projectPerMonth);
 
-
+        //create an array to hold the month values (1-12)
         var months = new Array();
         for (i = 0; i < monthParse.length; i++) {
           months.push(monthParse[i]["key"]);
@@ -552,7 +524,6 @@ var totalSuccessCheck = d.values[1].value;
 
 
         //parse out the number of projects that appear per month
-        /* 	console.log(projectPerMonth["true"]); */
         var values = new Array();
         for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
           if (projectPerMonth[1]["key"] == "true") {
@@ -563,12 +534,8 @@ var totalSuccessCheck = d.values[1].value;
         }
         console.log(values);
 
-
-
         //largest number that appears within array
         var projectCountMax = d3.max(values);
-
-
 
         //create nesting for goals
         var catGoal = d3.nest()
@@ -585,26 +552,6 @@ var totalSuccessCheck = d.values[1].value;
           .entries(data);
 
         console.log(catGoal);
-
-
-
-        //create array for category goals
-        /*
-                var catGoalArray = new Array();
-                for (i = 0; i < catGoal[1]["values"].length; i++) {
-                  if (catGoal[1]["key"] == "true") {
-                    catGoalArray.push(catGoal[1]["values"][i]["key"]);
-                  } else {
-                    catGoalArray.push(catGoal[0]["values"][i]["key"]);
-                  }
-                }
-                console.log(catGoalArray);
-        */
-
-        //get max value
-        /*         var maxGoal = d3.max(catGoalArray); */
-
-
 
 
         //projects that appear within each month
@@ -654,8 +601,10 @@ var totalSuccessCheck = d.values[1].value;
           .range([height, 10]);
 
 
+        //remove 2nd graph if it already exists
         d3.select("div#chartId2").selectAll("div").remove();
 
+        //append a new div in html inside chartId2 to contain graph
         var svg2 = d3.select("div#chartId2")
           .append("div")
           .classed("svg-container2", true) //container class to make it responsive
@@ -664,19 +613,6 @@ var totalSuccessCheck = d.values[1].value;
           .attr("viewBox", "0 0 1000 1200")
           //class to make it responsive
           .classed("svg-content-responsive", true);
-
-
-
-        /*
-        			var area = d3.area()
-        	    .curve(d3.curveMonotoneX)
-        	    .x(function(d) { return x(d.date); })
-        	    .y0(height)
-        	    .y1(function(d) { return y(d.price); });
-        */
-
-
-
         //append x axis for months to svg
         svg2.append("g")
           .attr("class", "x-axis")
@@ -692,6 +628,18 @@ var totalSuccessCheck = d.values[1].value;
           .attr("transform", "translate(100,0)")
           .attr("class", "y-axis")
           .call(d3.axisLeft(yScale2))
+
+        //label title for current graph shown
+
+        svg2.append("text")
+          .attr("y", 0)
+          .attr("x", margin.left + 50)
+          .attr("dy", "1em")
+          .attr("class", "graphTitle")
+          .style("font-size", "24px")
+          .style("color", "#3ea057")
+          .text(selection);
+
 
         //label for y axis: kickstarter main categories
         svg2.append("text")
@@ -710,6 +658,7 @@ var totalSuccessCheck = d.values[1].value;
           .style("text-anchor", "middle")
           .text("Month created");
 
+        //draw all the circles corrisponding to success
         circles = svg2.selectAll("circle.coordinate")
           .data(projectPerMonthStates)
           .enter()
@@ -743,6 +692,9 @@ var totalSuccessCheck = d.values[1].value;
 
 
           .attr("r", "6")
+          .style("display", function(d) {
+            return d == null ? "none" : null;
+          })
           .style("fill", function(d) {
 
             return ("rgb(143, 226, 133)");
@@ -779,48 +731,22 @@ var totalSuccessCheck = d.values[1].value;
               return yScale2(d.values[0].values[0].value);
             }
 
-            /*  console.log(d.values[0].value) */
-            /*  return yScale2(d.values[1].values[1].value); */
-
           })
           .transition()
-
-
-
           .attr("r", "6")
+          .style("display", function(d) {
+            return d == null ? "none" : null;
+          })
           .style("fill", function(d) {
-
             return ("rgb(186, 42, 85)");
-
-
           });
-
-
-
-
-        // if (successChart == 1) { // Hide or show the elements
-        //   d3.selectAll(".circlesSuccess").style("opacity", newOpacity);
-        //   // Update whether or not the elements are active
-        //   circlesSuccess.activeS = activeS;
-        // }
 
         svg2.append("defs").append("clipPath")
           .attr("id", "clip")
           .append("rect")
           .attr("width", width)
           .attr("height", height);
-
-
-
-
-
       }
-
-
-
-
-
-
     });
 
 
@@ -847,10 +773,6 @@ var totalSuccessCheck = d.values[1].value;
 
     //hover to show failed nodes only
     function filterFailed() {
-      /*
-      				var id = document.getElementById("chartId2");
-      				id.getElementsByClassName("failed").style.opacity = "0.2";
-      */
       d3.select("div#chartId2")
         .selectAll("circle.success")
         .style("opacity", "0.2");
@@ -859,7 +781,6 @@ var totalSuccessCheck = d.values[1].value;
         .selectAll("circle.failed")
         .transition()
         .attr("r", "10");
-      console.log("hello");
     }
 
     // SOURCES

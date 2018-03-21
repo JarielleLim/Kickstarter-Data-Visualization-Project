@@ -37,7 +37,7 @@ h1 {
   text-align: left;
  /*  margin-left: 100px; */
   margin-top: 0;
-  
+
   font-size: 2rem;
 }
 
@@ -143,7 +143,7 @@ font-size: 2em;
 }
 
 .col-2-2 {
-  
+
   width: 100%;
   margin-top:20px;
 
@@ -169,18 +169,15 @@ font-size: 2em;
 
 #brush-tool span{
 	display:block;
-/* 	border:1px solid black; */
-	margin-left:25px;
+	margin-left:30px;
 	font-size:0.8rem;
 	float:left;
 	margin-top:25px;
-	color:blue;
+	color:#3ea057;
 	text-transform: uppercase;
 	text-align: center;
-/* 	color:blue; */
 }
 
 #brush-tool  span:hover{
-	color:red;
-	
+	color:#3d3d3d;
 }
