@@ -664,7 +664,7 @@
 
           });
 
-
+					//created 2nd set of circles to show failed projects
 					 circles2 = svg2.selectAll("circle.coordinate2")
           .data(projectPerMonthStates)
           .enter()
@@ -731,63 +731,7 @@
 
 
 
-
-        // var line = d3.line()
-        //   .x(function(d){return d.key;})
-        //   .y(projectCount)
-        //   ;
-
-
-
-
-        /*
-
-       var xBrushScale = xScale = d3.scaleBand().rangeRound([width, 0]).padding(0.1);
-				var yBrushScale = d3.scaleLinear().range([height+50, 0]);
-
-
-				var xAxis2 = d3.axisBottom(xBrushScale)
-
-				xBrushScale.domain(xScale.domain);
-
-
-
-				var context = svg.append("g")
-    .attr("class", "context")
-    .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-				context.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height2 + ")")
-      .call(xAxis2);
-
-*/
-
-
-        /*
-        				var brush = d3.brushX()
-        			 .extent([[0, 0], [width, height+50]])
-        			 .on("brush end", brushed);
-
-        			        function brushed() {
-        			  if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
-        			  var s = d3.event.selection || x2.range();
-        			  x.domain(s.map(x2.invert, x2));
-        			  focus.select(".area").attr("d", area);
-        			  focus.select(".axis--x").call(xAxis);
-        			  svg.select(".zoom").call(zoom.transform, d3.zoomIdentity
-        			      .scale(width / (s[1] - s[0]))
-        			      .translate(-s[0], 0));
-        			}
-
-        */
-
-
-
       }
-
-
-      /* graph2(); */
 
 
 
@@ -797,23 +741,26 @@
     });
 
 
-				
+				//hover to show success nodes only
 			function filterSuccess(){
-			d3.select("div#chartId2").selectAll("circle.success").style("opacity","0.2");
+			d3.select("div#chartId2").selectAll("circle.failed").style("opacity","0.2");
 				
 			}
 			
+			//hover out show normal state
 			function backToNormal(){
 					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1");
 					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1");
 			}
-
+			
+			
+			//hover to show failed nodes only
 			function filterFailed(){
 /*
 				var id = document.getElementById("chartId2");
 				id.getElementsByClassName("failed").style.opacity = "0.2";
 */
-			 	d3.select("div#chartId2").selectAll("circle.failed").style("opacity","0.2");
+			 	d3.select("div#chartId2").selectAll("circle.success").style("opacity","0.2");
 				console.log("hello");
 			}
 
