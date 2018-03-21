@@ -2,11 +2,12 @@ body {
   font-family: 'Lato', sans-serif;
   background-color: white;
   color: #333333;
+  margin:0px;
   font-size: 0.6rem;
 }
 
 .titleHead {
-  width: 100%;
+ /*  width: 100%; */
   background: #3d3d3d;
   margin: 0;
   padding: 70px;
@@ -34,8 +35,9 @@ h1 {
   text-transform: uppercase;
   font-weight: bold;
   text-align: left;
-  margin-left: 100px;
+ /*  margin-left: 100px; */
   margin-top: 0;
+  
   font-size: 2rem;
 }
 
@@ -113,7 +115,7 @@ font-size: 2em;
 }
 
 #chartId2 {
-  margin-top: 40px;
+  margin-top: 0px;
   padding: 1rem;
 font-size: 2em;
 }
@@ -137,13 +139,29 @@ font-size: 2em;
   clip-path: url(#clip);
 }
 
+
+.failed{
+	opacity:1;
+	transition:opacity 0.2s ease-in-out;
+}
+
 #brush-tool {
+	display:block;
 	display:none;
+	margin:auto;
 }
 
 #brush-tool span{
+	display:block;
+/* 	border:1px solid black; */
 	margin-left:25px;
+	font-size:0.8rem;
+	float:left;
+	margin-top:25px;
 	color:blue;
+	text-transform: uppercase;
+	text-align: center;
+/* 	color:blue; */
 }
 
 #brush-tool  span:hover{

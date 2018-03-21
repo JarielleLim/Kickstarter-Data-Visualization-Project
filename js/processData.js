@@ -309,51 +309,7 @@
           .text("# of Projects Per Category");
 
         //function to sort the order of the bars by descending order
-        var sortBars = function() {
 
-          //sort the mainCatCount by descending order, returning only # of success/failures
-          var sortScale = mainCatCount.sort(function(a, b) {
-              return b.value - a.value;
-            })
-            .map(function(d) {
-              return d['key'];
-            });
-
-          console.log(sortScale)
-
-          //resets yScale domain based on sort order
-          yScale.domain(sortScale);
-
-          //redraws bar in sorted position
-          svg.selectAll(".bar")
-            .sort(function(a, b) {
-              return yScale(a.key) - yScale(b.key)
-            });
-
-          svg.selectAll(".bar").transition()
-            .attr("y", function(d) {
-              return yScale(d.key);
-            })
-
-          svg.selectAll(".bar2")
-            .sort(function(a, b) {
-              return yScale(a.key) - yScale(b.key)
-            });
-
-          svg.selectAll(".bar2").transition()
-            .attr("y", function(d) {
-
-              return yScale(d.key);
-            })
-
-          svg.selectAll(".baryaxis")
-            .call(d3.axisLeft(yScale))
-
-
-        };
-
-        //when clicked, run function sortBars
-        d3.select("#sort").on("click", sortBars);
 
         // Add the "success" text to show/hide data
         svg.append("text")
@@ -475,6 +431,7 @@
       //function calling
       graph1();
 
+	
 
       function graph2(selection) {
         var xdim = 'Critic_Score';
@@ -544,6 +501,7 @@
 
 
         //create array for category goals
+/*
         var catGoalArray = new Array();
         for (i = 0; i < catGoal[1]["values"].length; i++) {
           if (catGoal[1]["key"] == "true") {
@@ -553,9 +511,10 @@
           }
         }
         console.log(catGoalArray);
+*/
 
         //get max value
-        var maxGoal = d3.max(catGoalArray);
+/*         var maxGoal = d3.max(catGoalArray); */
 
 
 
@@ -667,7 +626,7 @@
           .data(projectPerMonthStates)
           .enter()
           .append("circle")
-          .attr("class", "coordinate")
+          .attr("class", "coordinate success")
           .attr("cx", function(d) {
             console.log(d.key + "  in text " + monthNames[d.key - 1])
 
@@ -710,7 +669,7 @@
           .data(projectPerMonthStates)
           .enter()
           .append("circle")
-          .attr("class", "coordinate2")
+          .attr("class", "coordinate2 failed")
           .attr("cx", function(d) {
             console.log(d.key + "  in text " + monthNames[d.key - 1])
 
@@ -832,9 +791,31 @@
 
 
 
+			
+
 
     });
 
+
+				
+			function filterSuccess(){
+			d3.select("div#chartId2").selectAll("circle.success").style("opacity","0.2");
+				
+			}
+			
+			function backToNormal(){
+					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1");
+					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1");
+			}
+
+			function filterFailed(){
+/*
+				var id = document.getElementById("chartId2");
+				id.getElementsByClassName("failed").style.opacity = "0.2";
+*/
+			 	d3.select("div#chartId2").selectAll("circle.failed").style("opacity","0.2");
+				console.log("hello");
+			}
 
     // SOURCES
     //   tool-tips
