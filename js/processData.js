@@ -372,8 +372,18 @@
               })
             } else {
               d3.selectAll(".bar2").attr("x", function(d) {
-                var totalSuccessCheck = d.values[1].value;
+                /*
+var totalSuccessCheck = d.values[1].value;
                 return xScale(totalSuccessCheck);
+*/
+								 if(d.values[1].key == "successful"){
+			          	return xScale(d.values[1].value);
+		          	}
+		          	else{
+			          	return xScale(d.values[0].value);
+		          	}
+
+
               })
             }
           })
@@ -404,8 +414,17 @@
               })
             } else {
               d3.selectAll(".bar2").attr("x", function(d) {
-                var totalSuccessCheck = d.values[1].value;
+               /*
+ var totalSuccessCheck = d.values[1].value;
                 return xScale(totalSuccessCheck);
+*/
+		
+								if(d.values[1].key == "successful"){
+			          	return xScale(d.values[1].value);
+		          	}
+		          	else{
+			          	return xScale(d.values[0].value);
+		          	}
               })
             }
           })
@@ -670,8 +689,7 @@
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-							
-						
+					
 							if(d.values[1].key == "true") {
 								if(d.values[1].values[0].key == "successful") {
 									return yScale2(d.values[1].values[0].value);
@@ -784,14 +802,22 @@
 
 				//hover to show success nodes only
 			function filterSuccess(){
-			d3.select("div#chartId2").selectAll("circle.failed").style("opacity","0.2");
+			d3.select("div#chartId2")
+			.selectAll("circle.failed")
+			.style("opacity","0.2");
+			
+			
+				d3.select("div#chartId2")
+			 	.selectAll("circle.success")
+			 	.transition()
+			.attr("r", "10");
 				
 			}
 			
 			//hover out show normal state
 			function backToNormal(){
-					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1");
-					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1");
+					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1").attr("r", "6");
+					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1").attr("r", "6");
 			}
 			
 			
@@ -801,7 +827,14 @@
 				var id = document.getElementById("chartId2");
 				id.getElementsByClassName("failed").style.opacity = "0.2";
 */
-			 	d3.select("div#chartId2").selectAll("circle.success").style("opacity","0.2");
+			 	d3.select("div#chartId2")
+			 	.selectAll("circle.success")
+			 	.style("opacity","0.2");
+			 	
+			 	d3.select("div#chartId2")
+			 	.selectAll("circle.failed")
+			 	.transition()
+			 	.attr("r", "10");
 				console.log("hello");
 			}
 

@@ -134,6 +134,22 @@ font-size: 2em;
   padding: 0;
 }
 
+
+@media (max-width:500px){
+	.col-1-2 {
+
+  width: 100%;
+
+}
+
+.col-2-2 {
+  
+  width: 100%;
+  margin-top:20px;
+
+}
+}
+
 .area {
   fill: steelblue;
   clip-path: url(#clip);
