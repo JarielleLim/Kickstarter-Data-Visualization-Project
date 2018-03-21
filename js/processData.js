@@ -346,9 +346,6 @@
           .text("# of Projects Per Category");
 
         //function to sort the order of the bars by descending order
-        
-        
-        
 
 
         // Add the "success" text to show/hide data
