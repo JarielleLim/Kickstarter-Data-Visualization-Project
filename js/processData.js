@@ -109,8 +109,8 @@
           return v.length;
         })
         .entries(data);
-        
-        
+
+
 
       //change type of data if needed (for later)
       data.forEach(function(d) {
@@ -197,16 +197,10 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
-          	if(d.values[1].key == "successful"){
-          		var successNo = d.values[1].value; 
-          	}
-          	else{
-	          	var successNo = d.values[0].value; 
-          	}
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.text(successNo)
+            div.text(d.values[1].value)
               .style("left", (d3.event.pageX + d.values.length) + "px")
               .style("top", (d3.event.pageY) + "px");
           })
@@ -220,12 +214,8 @@
           .duration(500)
           //calculate width of bar based on success value in each category
           .attr("width", function(d) {
-           if(d.values[1].key == "successful"){
-	          	return xScale(d.values[1].value) - margin.left;
-          	}
-          	else{
-	          	return xScale(d.values[0].value) - margin.left;
-          	}
+            var totalSuccess = d.values[1].value;
+            return xScale(totalSuccess) - margin.left
           });
 
 
@@ -241,19 +231,8 @@
           //calculate width of bar based on success value in each category
           //to find starting position for graph
           .attr("x", function(d) {
-   /*
-        var totalSuccessCheck = d.values[1].value;
+            var totalSuccessCheck = d.values[1].value;
             return xScale(totalSuccessCheck);
-*/
-            
-            if(d.values[1].key == "successful"){
-	          	return xScale(d.values[1].value);
-          	}
-          	else{
-	          	return xScale(d.values[0].value);
-          	}
-            
-            
           })
 
 
@@ -270,16 +249,10 @@
 
           //add tool-tip function to show value when hover
           .on("mouseover", function(d) {
-          	if(d.values[0].key == "failed"){
-          	var failedNo = d.values[0].value; 
-          	}
-          	else{
-	          	var failedNo = d.values[1].value; 
-          	}
             div.transition()
               .duration(200)
               .style("opacity", .9);
-            div.text(failedNo)
+            div.text(d.values[0].value)
               .style("left", (d3.event.pageX) + "px")
               .style("top", (d3.event.pageY) + "px");
           })
@@ -300,18 +273,8 @@
 
           //calculate width of bar based on failed value in each category
           .attr("width", function(d) {
-           /*
- var totalFailed = d.values[0].value
+            var totalFailed = d.values[0].value
             return xScale(totalFailed) - margin.left;
-*/
-				    if(d.values[0].key == "failed"){
-	          	return xScale(d.values[0].value) - margin.left;
-          	}
-          	else{
-	          	return xScale(d.values[1].value) - margin.left;
-          	}
-
-
           });
 
         //append x axis to svg
@@ -487,7 +450,7 @@ var totalSuccessCheck = d.values[1].value;
       //function calling
       graph1();
 
-	
+
 
       function graph2(selection) {
         var xdim = 'Critic_Score';
@@ -643,6 +606,18 @@ var totalSuccessCheck = d.values[1].value;
         	    .y1(function(d) { return y(d.price); });
         */
 
+        //label for current graph shown
+        svg2.append("text")
+          //.attr("transform", "rotate(-90)")
+          .attr("y", 0)
+          .attr("x", margin.left + 50)
+          .attr("dy", "1em")
+          .attr("class", "graphTitle")
+          .style("font-size", "24px")
+          .style("color", "#3ea057")
+          .text(selection);
+
+        console.log(selection);
 
 
         //append x axis for months to svg
@@ -698,28 +673,26 @@ var totalSuccessCheck = d.values[1].value;
 	              		return yScale2(d.values[1].values[1].value);
               	}
               }
-              
-					
               else {
-              
+
               	if(d.values[0].values[0].key == "successful") {
 									return yScale2(d.values[0].values[0].value);
               	}
-              	else {
+              	else{
 	              		return yScale2(d.values[0].values[1].value);
               	}
-	             
-             }
+	              return yScale2(d.values[0].values[0].value);
+              }
        })
-          .transition()	
-          
-          
-   
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
+
               return ("rgb(143, 226, 133)");
-     
+
 
           });
 
@@ -735,7 +708,7 @@ var totalSuccessCheck = d.values[1].value;
             return xScale2(monthNames[d.key - 1]);
           })
           .attr("cy", function(d) {
-          
+
           	if(d.values[1].key == "true") {
 								if(d.values[1].values[0].key == "failed") {
 									return yScale2(d.values[1].values[0].value);
@@ -745,7 +718,7 @@ var totalSuccessCheck = d.values[1].value;
               	}
               }
               else {
-              
+
               	if(d.values[0].values[0].key == "failed") {
 									return yScale2(d.values[0].values[0].value);
               	}
@@ -754,20 +727,20 @@ var totalSuccessCheck = d.values[1].value;
               	}
 	              return yScale2(d.values[0].values[0].value);
               }
-         
+
              /*  console.log(d.values[0].value) */
              /*  return yScale2(d.values[1].values[1].value); */
-            
+
           })
-          .transition()	
-          
-          
-          
+          .transition()
+
+
+
           .attr("r", "6")
           .style("fill", function(d) {
-           
+
               return ("rgb(186, 42, 85)");
-          
+
 
           });
 
@@ -794,7 +767,7 @@ var totalSuccessCheck = d.values[1].value;
 
 
 
-			
+
 
 
     });
@@ -813,14 +786,14 @@ var totalSuccessCheck = d.values[1].value;
 			.attr("r", "10");
 				
 			}
-			
+
 			//hover out show normal state
 			function backToNormal(){
 					d3.select("div#chartId2").selectAll("circle.failed").style("opacity","1").attr("r", "6");
 					d3.select("div#chartId2").selectAll("circle.success").style("opacity","1").attr("r", "6");
 			}
-			
-			
+
+
 			//hover to show failed nodes only
 			function filterFailed(){
 /*
