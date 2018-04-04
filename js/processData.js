@@ -184,6 +184,7 @@
           .on("click", function(d) {
             /* successChart = 1; */
             graph2(d.key);
+
             document.getElementById("chartId2").style.display = "block";
             document.getElementById("brush-tool").style.display = "block";
           })
@@ -604,6 +605,134 @@
         //remove 2nd graph if it already exists
         d3.select("div#chartId2").selectAll("div").remove();
 
+
+        //append a new div in html inside chartId2 to contain graph
+        var svg3 = d3.select("div#chartId3")
+          .append("div")
+          .classed("svg-container3", true) //container class to make it responsive
+          .append("svg")
+          .attr("preserveAspectRatio", "xMinYMin meet")
+          .attr("viewBox", "0 0 1000 1200")
+          //class to make it responsive
+          .classed("svg-content-responsive", true);
+
+          //append y axis to svg for project number
+          svg3.append("g")
+          .attr("class", "y-axis")
+            .attr("transform", "translate(100,0)")
+            .attr("font-size", "0px")
+            .call(d3.axisLeft(yScale2))
+
+            //append x axis for months to svg
+            svg3.append("g")
+              .attr("class", "x-axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(xScale2))
+              .attr("y", 30)
+              .attr("x", 800)
+              .attr("font-size", "0px")
+              .attr("padding", "16rem")
+
+
+          svg3.append("rect")
+          .attr("transform", "translate(100,0)")
+          .attr("height",height)
+          .attr("width",width)
+          .attr("fill","#f1f1f1")
+          .attr("rx","3px")
+          .attr("ry","3px")
+          ;
+
+              line = d3.line()
+              		.x(function (d){
+              	    	return xScale2(monthNames[d.key - 1]);
+              	     })
+              		.y(function (d){
+              			  if (d.values[1].key == "true") {
+                            if (d.values[1].values[0].key == "successful") {
+                              return yScale2(d.values[1].values[0].value);
+                            } else {
+                              return yScale2(d.values[1].values[1].value);
+                            }
+                          } else {
+
+                            if (d.values[0].values[0].key == "successful") {
+                              return yScale2(d.values[0].values[0].value);
+                            } else {
+                              return yScale2(d.values[0].values[1].value);
+                            }
+
+                          }
+
+              		})
+
+
+
+
+
+
+
+              		svg3.append("path")
+              		.datum(projectPerMonthStates.sort(function(a,b){
+              		    return a.key - b.key;
+              		}))
+
+              		//.append("path")
+              		.attr("class", "success")
+              		.attr("stroke", "rgb(143, 226, 133)")
+              		.attr("stroke-linejoin", "round")
+              		.attr("stroke-linecap", "round")
+              		.attr("fill", "none")
+              		.attr("stroke-width", 1)
+              		.attr("d", line);
+
+
+
+
+              		line = d3.line()
+
+              		.x(function (d){
+              	    	return xScale2(monthNames[d.key - 1]);
+              	     })
+              		.y(function (d){
+                        if (d.values[1].key == "true") {
+                            if (d.values[1].values[0].key == "failed") {
+                              return yScale2(d.values[1].values[0].value);
+                            } else {
+                              return yScale2(d.values[1].values[1].value);
+                            }
+                          } else {
+
+                            if (d.values[0].values[0].key == "failed") {
+                              return yScale2(d.values[0].values[0].value);
+                            } else {
+                              return yScale2(d.values[0].values[1].value);
+                            }
+                            return yScale2(d.values[0].values[0].value);
+                          }
+
+              		})
+
+              		svg3.append("path")
+              		.datum(projectPerMonthStates.sort(function(a,b){
+
+              		return a.key - b.key;
+
+              		}))
+
+
+                  //.append("path")
+              		.attr("class", "failed")
+              		.attr("stroke-linejoin", "round")
+              		.attr("stroke-linecap", "round")
+              		.attr("fill", "none")
+                  .attr("stroke", "rgb(186, 42, 85)")
+              		.attr("stroke-width", 1)
+              		.attr("d", line);
+
+
+
+
         //append a new div in html inside chartId2 to contain graph
         var svg2 = d3.select("div#chartId2")
           .append("div")
@@ -625,9 +754,10 @@
 
         //append y axis to svg for project number
         svg2.append("g")
+        .attr("class", "y-axis")
           .attr("transform", "translate(100,0)")
-          .attr("class", "y-axis")
           .call(d3.axisLeft(yScale2))
+
 
         //label title for current graph shown
 
@@ -657,6 +787,12 @@
             (height + margin.top + 30) + ")")
           .style("text-anchor", "middle")
           .text("Month created");
+
+
+
+
+
+
 
         //draw all the circles corrisponding to success
         circles = svg2.selectAll("circle.coordinate")
