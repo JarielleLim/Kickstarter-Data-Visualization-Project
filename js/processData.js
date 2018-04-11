@@ -368,6 +368,37 @@
 
         d3.select("#sort").on("click", sortBars);
 
+        var widthFailed = function(d) {
+          if (d.values[0].key == "failed") {
+            return xScale(d.values[0].value) - margin.left;
+          } else {
+            return xScale(d.values[1].value) - margin.left;
+          }
+        }
+
+        var splitBars = function() {
+
+          var xScaleInvert = d3.scaleLinear()
+          xScaleInvert.domain([0,maxNumberProject])
+          // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
+            .range([width, margin.left]);
+
+
+//proper syntax to subtract margin from width?? keep getting null x
+          d3.selectAll(".bar2")
+            .attr("x",  function(d){return widthFailed - margin.left})
+            .attr("width", widthFailed);
+
+//draws scale on opposite side
+            svg.append("g")
+              .attr("class", "x-axisInv")
+              .attr("transform", "translate(-700 ," + height + ")")
+              .call(d3.axisBottom(xScaleInvert))
+
+
+        }
+        d3.select("#split").on("click", splitBars);
+
 
         // Add the "success" text to show/hide data
         svg.append("text")
@@ -600,165 +631,164 @@
 
 
 
-              var selected = document.getElementById(selection);
-              if (selected == null) {
+        var selected = document.getElementById(selection);
+        if (selected == null) {
 
 
-                        var xScale3 = d3.scalePoint();
-                        var yScale3 = d3.scaleLinear().range([100, 0]);
+          var xScale3 = d3.scalePoint();
+          var yScale3 = d3.scaleLinear().range([100, 0]);
 
 
-                        var smallWidth = 300;
-                        var smallHeight = 400;
+          var smallWidth = 300;
+          var smallHeight = 400;
 
 
-                        xScale3.domain(monthNames)
-                          .range([margin.left, 1000]);
+          xScale3.domain(monthNames)
+            .range([margin.left, 1000]);
 
-                        yScale3.domain([0, projectCountMax])
-                          .range([smallHeight, 10]);
+          yScale3.domain([0, projectCountMax])
+            .range([smallHeight, 10]);
 
-                        var valueline = d3.line()
-                          .x(function(d) {
-                            return xScale3(d.launched.split("-")[1]);
-                          })
-                          .y(function(d) {
-                            return yScale3(d.pledged);
-                          });
-
-
-
-                        //append a new div in html inside chartId3 to contain graph
-                        var svg3 = d3.select("div#chartId3")
-                          .append("div")
-                          .classed("svg-container3 col-4-12", true) //container class to make it responsive
-                          .append("svg")
-                          .attr("id",selection)
-                          .attr("preserveAspectRatio", "xMinYMin meet")
-                          .attr("viewBox", "0 0 1000 550")
-                          //class to make it responsive
-                          .classed("svg-content-responsive2", true)
-
-                          ;
-
-                          // d3.select(".svg-container")
-                          // .append("button")
-                          // .attr("class","")
-
-
-                          //append y axis to svg for project number
-
-
-                          svg3.append("g")
-                          .attr("class", "y-axis")
-                            .attr("transform", "translate(100,0)")
-                            .attr("font-size", "0px")
-                            .call(d3.axisLeft(yScale3))
-
-                            //append x axis for months to svg
-                            svg3.append("g")
-                              .attr("class", "x-axis")
-                              .attr("transform", "translate(0," + smallHeight + ")")
-                              .call(d3.axisBottom(xScale3))
-                              .attr("y", 30)
-                              .attr("x", 800)
-                              .attr("font-size", "0px")
-                              .attr("padding", "16rem")
-                              line = d3.line()
-                                  .x(function (d){
-                                      return xScale3(monthNames[d.key - 1]);
-                                     })
-                                  .y(function (d){
-                                      if (d.values[1].key == "true") {
-                                            if (d.values[1].values[0].key == "successful") {
-                                              return yScale3(d.values[1].values[0].value);
-                                            } else {
-                                              return yScale3(d.values[1].values[1].value);
-                                            }
-                                          } else {
-
-                                            if (d.values[0].values[0].key == "successful") {
-                                              return yScale3(d.values[0].values[0].value);
-                                            } else {
-                                              return yScale3(d.values[0].values[1].value);
-                                            }
-
-                                          }
-
-                                  })
-
-                                  svg3.append("path")
-                                  .datum(projectPerMonthStates.sort(function(a,b){
-                                      return a.key - b.key;
-                                  }))
-
-                                  //.append("path")
-                                  .attr("class", "success")
-                                  .attr("stroke", "rgb(143, 226, 133)")
-                                  .attr("stroke-linejoin", "round")
-                                  .attr("stroke-linecap", "round")
-                                  .attr("fill", "none")
-                                  .attr("stroke-width", 4)
-                                  .attr("d", line);
+          var valueline = d3.line()
+            .x(function(d) {
+              return xScale3(d.launched.split("-")[1]);
+            })
+            .y(function(d) {
+              return yScale3(d.pledged);
+            });
 
 
 
+          //append a new div in html inside chartId3 to contain graph
+          var svg3 = d3.select("div#chartId3")
+            .append("div")
+            .classed("svg-container3 col-4-12", true) //container class to make it responsive
+            .append("svg")
+            .attr("id", selection)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 1000 550")
+            //class to make it responsive
+            .classed("svg-content-responsive2", true)
 
-                                  line = d3.line()
+          ;
 
-                                  .x(function (d){
-                                      return xScale3(monthNames[d.key - 1]);
-                                     })
-                                  .y(function (d){
-                                        if (d.values[1].key == "true") {
-                                            if (d.values[1].values[0].key == "failed") {
-                                              return yScale3(d.values[1].values[0].value);
-                                            } else {
-                                              return yScale3(d.values[1].values[1].value);
-                                            }
-                                          } else {
-
-                                            if (d.values[0].values[0].key == "failed") {
-                                              return yScale3(d.values[0].values[0].value);
-                                            } else {
-                                              return yScale3(d.values[0].values[1].value);
-                                            }
-                                            return yScale3  (d.values[0].values[0].value);
-                                          }
-
-                                  })
-
-                                  svg3.append("path")
-                                  .datum(projectPerMonthStates.sort(function(a,b){
-
-                                  return a.key - b.key;
-
-                                  }))
+          // d3.select(".svg-container")
+          // .append("button")
+          // .attr("class","")
 
 
-                                  //.append("path")
-                                  .attr("class", "failed")
-                                  .attr("stroke-linejoin", "round")
-                                  .attr("stroke-linecap", "round")
-                                  .attr("fill", "none")
-                                  .attr("stroke", "rgb(186, 42, 85)")
-                                  .attr("stroke-width", 4)
-                                  .attr("d", line);
+          //append y axis to svg for project number
 
-              }
-              else{
+
+          svg3.append("g")
+            .attr("class", "y-axis")
+            .attr("transform", "translate(100,0)")
+            .attr("font-size", "0px")
+            .call(d3.axisLeft(yScale3))
+
+          //append x axis for months to svg
+          svg3.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", "translate(0," + smallHeight + ")")
+            .call(d3.axisBottom(xScale3))
+            .attr("y", 30)
+            .attr("x", 800)
+            .attr("font-size", "0px")
+            .attr("padding", "16rem")
+          line = d3.line()
+            .x(function(d) {
+              return xScale3(monthNames[d.key - 1]);
+            })
+            .y(function(d) {
+              if (d.values[1].key == "true") {
+                if (d.values[1].values[0].key == "successful") {
+                  return yScale3(d.values[1].values[0].value);
+                } else {
+                  return yScale3(d.values[1].values[1].value);
+                }
+              } else {
+
+                if (d.values[0].values[0].key == "successful") {
+                  return yScale3(d.values[0].values[0].value);
+                } else {
+                  return yScale3(d.values[0].values[1].value);
+                }
 
               }
 
-          // svg3.append("rect")
-          // .attr("transform", "translate(100,0)")
-          // .attr("height",height)
-          // .attr("width",width)
-          // .attr("fill","#f1f1f1")
-          // .attr("rx","3px")
-          // .attr("ry","3px")
-          // ;
-          //Create lne for success
+            })
+
+          svg3.append("path")
+            .datum(projectPerMonthStates.sort(function(a, b) {
+              return a.key - b.key;
+            }))
+
+            //.append("path")
+            .attr("class", "success")
+            .attr("stroke", "rgb(143, 226, 133)")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("fill", "none")
+            .attr("stroke-width", 4)
+            .attr("d", line);
+
+
+
+
+          line = d3.line()
+
+            .x(function(d) {
+              return xScale3(monthNames[d.key - 1]);
+            })
+            .y(function(d) {
+              if (d.values[1].key == "true") {
+                if (d.values[1].values[0].key == "failed") {
+                  return yScale3(d.values[1].values[0].value);
+                } else {
+                  return yScale3(d.values[1].values[1].value);
+                }
+              } else {
+
+                if (d.values[0].values[0].key == "failed") {
+                  return yScale3(d.values[0].values[0].value);
+                } else {
+                  return yScale3(d.values[0].values[1].value);
+                }
+                return yScale3(d.values[0].values[0].value);
+              }
+
+            })
+
+          svg3.append("path")
+            .datum(projectPerMonthStates.sort(function(a, b) {
+
+              return a.key - b.key;
+
+            }))
+
+
+            //.append("path")
+            .attr("class", "failed")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("fill", "none")
+            .attr("stroke", "rgb(186, 42, 85)")
+            .attr("stroke-width", 4)
+            .attr("d", line);
+
+        } else {
+
+        }
+
+        // svg3.append("rect")
+        // .attr("transform", "translate(100,0)")
+        // .attr("height",height)
+        // .attr("width",width)
+        // .attr("fill","#f1f1f1")
+        // .attr("rx","3px")
+        // .attr("ry","3px")
+        // ;
+        //Create lne for success
 
 
 
@@ -784,7 +814,7 @@
 
         //append y axis to svg for project number
         svg2.append("g")
-        .attr("class", "y-axis")
+          .attr("class", "y-axis")
           .attr("transform", "translate(100,0)")
           .call(d3.axisLeft(yScale2))
 
@@ -937,7 +967,7 @@
     }
 
 
-    function deleteChart(){
+    function deleteChart() {
       d3.select("div#chartId3").selectAll("div.svg-container3").remove();
       alert("hello");
     }
