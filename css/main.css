@@ -17,35 +17,55 @@ body {
 }
 
 button {
-display:block;
-border: none;
-background: #3ea057;
-text-decoration: none;
-text-shadow: none;
-padding: 8px;
-margin: 15px;
-margin-bottom: 0px;
-color: white;
-border-radius: 10px;
+  display:inline-block;
+  background:#3ea057;
+  color:#FFFFFF;
+  box-shadow:0rem 0rem 0.5rem rgba(0,0,0,0.1);
+  padding:1rem 1.5rem;
+  transition: opacity 0.2s linear;
+  margin:1rem;
+  text-transform: uppercase;
+  border:none;
 }
+
 
 button:hover{
   background: #3d3d3d;
   cursor: pointer;
 }
 
-.clearAll{
-  display:blcok
+a.clearAll{
+  display:inline-block;
+  background:#3ea057;
+  color:#FFFFFF;
+  box-shadow:0rem 0rem 0.5rem rgba(0,0,0,0.1);
+  padding:1rem 1.5rem;
+  transition: opacity 0.2s linear;
+  margin:1rem;
+  text-transform: uppercase;
 }
-.close{
-  position:absolute;
-  top:0;
-  right:0;
-  border-radius:0;
-  padding:0.5rem 0.75rem;
-  font-weight:bold;
-  color:#252338;
-  background:#a2b9ca;
+
+a.clearAll:after{
+  content: '';
+  display:table;
+
+}
+
+a.clearAll:hover{
+  opacity:0.8;
+}
+
+text.close{
+  fill:red;
+}
+
+
+text.close:hover{
+  opacity:0.5;
+}
+.container{
+  margin:auto;
+  max-width:90%;
 }
 
 h1 {

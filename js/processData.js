@@ -663,8 +663,9 @@
           var svg3 = d3.select("div#chartId3")
             .append("div")
             .classed("svg-container3 col-4-12", true) //container class to make it responsive
+              .attr("id", selection)
             .append("svg")
-            .attr("id", selection)
+
             .attr("preserveAspectRatio", "xMinYMin meet")
             .attr("viewBox", "0 0 1000 550")
             //class to make it responsive
@@ -679,6 +680,24 @@
 
           //append y axis to svg for project number
 
+
+          svg3.append("text")
+          .text(selection)
+          .attr("font-size","30px")
+          .attr("y",smallHeight + 75)
+          .attr("x",100)
+          ;
+
+          svg3.append("text")
+          .attr("class","close")
+          .attr("x", 1000 - 125)
+          .attr("y",smallHeight + 75)
+          .attr("font-size","30px")
+          .attr("style", "text-transform:uppercase")
+          .on("click", function(d) {
+            deleteSelectedChart(selection);
+          })
+          .text("remove");
 
           svg3.append("g")
             .attr("class", "y-axis")
@@ -892,10 +911,7 @@
             return d == null ? "none" : null;
           })
           .style("fill", function(d) {
-
             return ("rgb(143, 226, 133)");
-
-
           });
 
         //created 2nd set of circles to show failed projects
@@ -969,7 +985,11 @@
 
     function deleteChart() {
       d3.select("div#chartId3").selectAll("div.svg-container3").remove();
-      alert("hello");
+
+    }
+
+    function deleteSelectedChart(selection){
+      d3.select("div#chartId3").selectAll("div#"+selection).remove();
     }
 
 
