@@ -800,7 +800,7 @@
             }))
 
 
-            //.append("path")
+
             .attr("class", "failed")
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
@@ -810,18 +810,9 @@
             .attr("d", line);
 
         } else {
-
+          //If id already exist, then don't generate any charts
         }
 
-        // svg3.append("rect")
-        // .attr("transform", "translate(100,0)")
-        // .attr("height",height)
-        // .attr("width",width)
-        // .attr("fill","#f1f1f1")
-        // .attr("rx","3px")
-        // .attr("ry","3px")
-        // ;
-        //Create lne for success
 
 
 
@@ -982,7 +973,6 @@
         .selectAll("circle.failed")
         .style("opacity", "0.2");
 
-
       d3.select("div#chartId2")
         .selectAll("circle.success")
         .transition()
@@ -996,12 +986,13 @@
       d3.select("div#chartId2").selectAll("circle.success").style("opacity", "1").attr("r", "6");
     }
 
-
+    //delete all line charts from view
     function deleteChart() {
       d3.select("div#chartId3").selectAll("div.svg-container3").remove();
 
     }
 
+    //delete only selected charts
     function deleteSelectedChart(selection){
       d3.select("div#chartId3").selectAll("div#"+selection).remove();
     }
