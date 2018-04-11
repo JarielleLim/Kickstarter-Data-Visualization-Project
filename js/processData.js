@@ -170,7 +170,7 @@
           .data(projectCount)
           .enter()
           .append("rect")
-          .attr("class", "bar")
+          .attr("class", "barRect bar")
           .style('fill', function(d) {
             return colorScale(1);
           })
@@ -187,6 +187,7 @@
 
             document.getElementById("chartId2").style.display = "block";
             document.getElementById("brush-tool").style.display = "block";
+
           })
 
           //add tool-tip function to show value when hover
@@ -226,7 +227,7 @@
           .data(projectCount)
           .enter()
           .append("rect")
-          .attr("class", "bar2")
+          .attr("class", "barRect bar2")
           .style('fill', function(d) {
             return colorScale(15);
           })
@@ -386,7 +387,19 @@
 
 //proper syntax to subtract margin from width?? keep getting null x
           d3.selectAll(".bar2")
-            .attr("x",  function(d){return widthFailed - margin.left})
+          // widthFailed -
+            // .attr("x",  widthFailed)
+              // .attr("transform", "translate("+ widthFailed + ", 0)")
+              // .attr("x", margin.Left)
+              .attr("x", function(d) {
+                if (d.values[1].key == "failed") {
+                  return xScale(-d.values[1].value);
+                } else {
+                  return xScale(-d.values[0].value);
+                }
+
+              })
+
             .attr("width", widthFailed);
 
 //draws scale on opposite side
@@ -397,6 +410,7 @@
 
 
         }
+
         d3.select("#split").on("click", splitBars);
 
 
