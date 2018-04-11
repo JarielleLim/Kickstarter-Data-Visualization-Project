@@ -35,8 +35,7 @@ button:hover{
 }
 
 .clearAll{
-  position:absolute;
-  display:block;
+  display:blcok
 }
 .close{
   position:absolute;
@@ -147,21 +146,19 @@ path.area {
 }
 
 #chartId {
-  display:block;
   padding: 1rem;
   padding-top: 0;
 font-size: 2em;
 }
 
 #chartId2 {
-  display:block;
   margin-top: 0px;
   padding: 1rem;
 font-size: 2em;
 }
 
 #chartId3 {
-  position:relative;
+
   display:block;
   /* width:100%; */
 }
