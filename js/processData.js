@@ -314,6 +314,7 @@
 
         //label for y axis: kickstarter main categories
         svg.append("text")
+        .attr("id", "yAxisText")
           .attr("transform", "rotate(-90)")
           .attr("y", 0)
           .attr("x", 0 - (height / 2))
@@ -323,6 +324,7 @@
 
         //label for x axis: # of Project Per Category
         svg.append("text")
+        .attr("id", "xAxisText")
           .attr("transform",
             "translate(" + (width / 2) + " ," +
             (height + margin.bottom) + ")")
@@ -405,8 +407,22 @@
           // var xScaleNew = d3.scaleLinear()
           // xScaleNew.domain([0, function(d){d3.max(d.values[1].value)}])
           //   .range([width, margin.left]);
-
+          //select first div in html to place first graph in
           //proper syntax to subtract margin from width?? keep getting null x
+          d3.select("svg")
+            .attr("viewBox", "-580 0 1000 600")
+  d3.select("#xAxisText")
+  .attr("x", "-500")
+
+  d3.select("#yAxisText")
+  .attr("y", "-550")
+
+  d3.selectAll(".legend")
+  .attr("x", "-500")
+
+  d3.selectAll(".legendText")
+  .attr("x", "-470")
+
           d3.selectAll(".bar2")
             // widthFailed -
             // .attr("x",  widthFailed)
@@ -440,6 +456,7 @@
           .attr("x", width - margin.right)
           .attr("y", margin.top)
           .attr("class", "button")
+          .attr("class", "legendText")
           .style("fill", "rgb(143, 226, 133)")
           .on("click", function() {
             // Determine if current line is visible
@@ -472,7 +489,8 @@
         svg.append("rect")
           .attr("x", width - margin.right - 30)
           .attr("y", margin.top - 15)
-          .attr("class", "legendSquare")
+          .attr("class", "c")
+          .attr("class", "legend")
           .attr("width", "20")
           .attr("height", "20")
           .on("click", function() {
@@ -506,7 +524,7 @@
         svg.append("rect")
           .attr("x", width - margin.right - 30)
           .attr("y", margin.top + 13)
-          .attr("class", "legendSquare")
+          .attr("class", "legend")
           .attr("width", "20")
           .attr("height", "20")
           .on("click", function() {
@@ -525,6 +543,7 @@
           .attr("x", width - margin.right)
           .attr("y", margin.top + 30)
           .attr("class", "button")
+          .attr("class", "legendText")
           .style("fill", "rgb(186, 42, 85)")
           .on("click", function() {
             // Determine if current line is visible
@@ -938,8 +957,6 @@
             }
           })
           .transition()
-
-
 
           .attr("r", "6")
           .style("display", function(d) {
