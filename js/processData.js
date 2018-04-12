@@ -369,6 +369,14 @@
 
         d3.select("#sort").on("click", sortBars);
 
+        var xScaleFailed = function(d) {
+          if (d.values[0].key == "failed") {
+            return d3.max(d.values[0].value)
+          }
+        }
+
+        console.log("xScaleFailed" + xScaleFailed(projectCount))
+
         var widthFailed = function(d) {
           if (d.values[0].key == "failed") {
             return xScale(d.values[0].value) - margin.left;
@@ -377,36 +385,49 @@
           }
         }
 
+        console.log("Width Failed " + widthFailed)
+
+        // var maxPos = function(d) {
+        //   d3.max(d.values[1].value)
+        // }
+
         var splitBars = function() {
 
           var xScaleInvert = d3.scaleLinear()
-          xScaleInvert.domain([0,maxNumberProject])
-          // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
+          xScaleInvert.domain([0, projectCountMax])
+            // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
             .range([width, margin.left]);
 
+          // var xScaleNew = d3.select("xScale")
+          //   .domain([0, function(d) {
+          //     d3.max(d.values[1].value)
+          //   }])
+          // var xScaleNew = d3.scaleLinear()
+          // xScaleNew.domain([0, function(d){d3.max(d.values[1].value)}])
+          //   .range([width, margin.left]);
 
-//proper syntax to subtract margin from width?? keep getting null x
+          //proper syntax to subtract margin from width?? keep getting null x
           d3.selectAll(".bar2")
-          // widthFailed -
+            // widthFailed -
             // .attr("x",  widthFailed)
-              // .attr("transform", "translate("+ widthFailed + ", 0)")
-              // .attr("x", margin.Left)
-              .attr("x", function(d) {
-                if (d.values[1].key == "failed") {
-                  return xScale(-d.values[1].value);
-                } else {
-                  return xScale(-d.values[0].value);
-                }
+            // .attr("transform", "translate("+ widthFailed + ", 0)")
+            // .attr("x", margin.Left)
+            .attr("x", function(d) {
+              if (d.values[1].key == "failed") {
+                return xScale(-d.values[1].value);
+              } else {
+                return xScale(-d.values[0].value);
+              }
 
-              })
+            })
 
             .attr("width", widthFailed);
 
-//draws scale on opposite side
-            svg.append("g")
-              .attr("class", "x-axisInv")
-              .attr("transform", "translate(-700 ," + height + ")")
-              .call(d3.axisBottom(xScaleInvert))
+          //draws scale on opposite side
+          svg.append("g")
+            .attr("class", "x-axisInv")
+            .attr("transform", "translate(-700 ," + height + ")")
+            .call(d3.axisBottom(xScaleInvert))
 
 
         }
@@ -580,6 +601,16 @@
         }
         console.log(values);
 
+        //parse out the number of projects that appear per month
+        var valuesFailed = new Array();
+        for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
+          if (projectPerMonth[1]["key"] == "true") {
+            values.push(projectPerMonth[1]["values"][i]["value"]);
+          } else {
+            values.push(projectPerMonth[0]["values"][i]["value"]);
+          }
+        }
+
         //largest number that appears within array
         var projectCountMax = d3.max(values);
 
@@ -677,7 +708,7 @@
           var svg3 = d3.select("div#chartId3")
             .append("div")
             .classed("svg-container3 col-4-12", true) //container class to make it responsive
-              .attr("id", selection)
+            .attr("id", selection)
             .append("svg")
 
             .attr("preserveAspectRatio", "xMinYMin meet")
@@ -696,22 +727,21 @@
 
 
           svg3.append("text")
-          .text(selection)
-          .attr("font-size","30px")
-          .attr("y",smallHeight + 75)
-          .attr("x",100)
-          ;
+            .text(selection)
+            .attr("font-size", "30px")
+            .attr("y", smallHeight + 75)
+            .attr("x", 100);
 
           svg3.append("text")
-          .attr("class","close")
-          .attr("x", 1000 - 125)
-          .attr("y",smallHeight + 75)
-          .attr("font-size","30px")
-          .attr("style", "text-transform:uppercase")
-          .on("click", function(d) {
-            deleteSelectedChart(selection);
-          })
-          .text("remove");
+            .attr("class", "close")
+            .attr("x", 1000 - 125)
+            .attr("y", smallHeight + 75)
+            .attr("font-size", "30px")
+            .attr("style", "text-transform:uppercase")
+            .on("click", function(d) {
+              deleteSelectedChart(selection);
+            })
+            .text("remove");
 
           svg3.append("g")
             .attr("class", "y-axis")
@@ -993,8 +1023,8 @@
     }
 
     //delete only selected charts
-    function deleteSelectedChart(selection){
-      d3.select("div#chartId3").selectAll("div#"+selection).remove();
+    function deleteSelectedChart(selection) {
+      d3.select("div#chartId3").selectAll("div#" + selection).remove();
     }
 
 
