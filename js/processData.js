@@ -369,13 +369,13 @@
 
         d3.select("#sort").on("click", sortBars);
 
-        var xScaleFailed = function(d) {
-          if (d.values[0].key == "failed") {
-            return d3.max(d.values[0].value)
-          }
-        }
+        // var xScaleFailed = function(d) {
+        //   if (d.values[0].key == "failed") {
+        //     return d3.max(d.values[0].value)
+        //   }
+        // }
 
-        console.log("xScaleFailed" + xScaleFailed(projectCount))
+        //console.log("xScaleFailed" + xScaleFailed(projectCount))
 
         var widthFailed = function(d) {
           if (d.values[0].key == "failed") {
@@ -394,7 +394,7 @@
         var splitBars = function() {
 
           var xScaleInvert = d3.scaleLinear()
-          xScaleInvert.domain([0, projectCountMax])
+          xScaleInvert.domain([0, maxNumberProject])
             // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
             .range([width, margin.left]);
 
