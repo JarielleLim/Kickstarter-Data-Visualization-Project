@@ -121,13 +121,6 @@
 
       var maxNumberProject = d3.max(catValueArray);
 
-      // var width = window.innerWidth;
-      // var height = window.innerHeight;
-      //
-      // var widthGraph = window.innerWidth + padding + padding;
-      // var heightGraph = window.innerHeight + padding + padding;
-
-
       //define color scale
       var colorScale =
         d3.scaleLinear()
@@ -314,7 +307,7 @@
 
         //label for y axis: kickstarter main categories
         svg.append("text")
-        .attr("id", "yAxisText")
+          .attr("id", "yAxisText")
           .attr("transform", "rotate(-90)")
           .attr("y", 0)
           .attr("x", 0 - (height / 2))
@@ -324,7 +317,7 @@
 
         //label for x axis: # of Project Per Category
         svg.append("text")
-        .attr("id", "xAxisText")
+          .attr("id", "xAxisText")
           .attr("transform",
             "translate(" + (width / 2) + " ," +
             (height + margin.bottom) + ")")
@@ -371,13 +364,6 @@
 
         d3.select("#sort").on("click", sortBars);
 
-        // var xScaleFailed = function(d) {
-        //   if (d.values[0].key == "failed") {
-        //     return d3.max(d.values[0].value)
-        //   }
-        // }
-
-        //console.log("xScaleFailed" + xScaleFailed(projectCount))
 
         var widthFailed = function(d) {
           if (d.values[0].key == "failed") {
@@ -389,52 +375,36 @@
 
         console.log("Width Failed " + widthFailed)
 
-        // var maxPos = function(d) {
-        //   d3.max(d.values[1].value)
-        // }
+
 
         var splitBars = function() {
 
           var xScaleInvert = d3.scaleLinear()
           xScaleInvert.domain([0, maxNumberProject])
-            // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
             .range([width, margin.left]);
 
-          // var xScaleNew = d3.select("xScale")
-          //   .domain([0, function(d) {
-          //     d3.max(d.values[1].value)
-          //   }])
-          // var xScaleNew = d3.scaleLinear()
-          // xScaleNew.domain([0, function(d){d3.max(d.values[1].value)}])
-          //   .range([width, margin.left]);
-          //select first div in html to place first graph in
-          //proper syntax to subtract margin from width?? keep getting null x
           d3.select("svg")
             .attr("viewBox", "-580 0 1000 600")
-  d3.select("#xAxisText")
-  .attr("x", "-500")
+          d3.select("#xAxisText")
+            .attr("x", "-500")
 
-  d3.select("#yAxisText")
-  .attr("y", "-550")
+          d3.select("#yAxisText")
+            .attr("y", "-550")
 
-  d3.selectAll(".legend")
-  .attr("x", "-500")
+          d3.selectAll(".legend")
+            .attr("x", "-500")
 
-  d3.selectAll(".legendText")
-  .attr("x", "-470")
+          d3.selectAll(".legendText")
+            .attr("x", "-470")
 
           d3.selectAll(".bar2")
-            // widthFailed -
-            // .attr("x",  widthFailed)
-            // .attr("transform", "translate("+ widthFailed + ", 0)")
-            // .attr("x", margin.Left)
+
             .attr("x", function(d) {
               if (d.values[1].key == "failed") {
                 return xScale(-d.values[1].value);
               } else {
                 return xScale(-d.values[0].value);
               }
-
             })
 
             .attr("width", widthFailed);
@@ -444,12 +414,14 @@
             .attr("class", "x-axisInv")
             .attr("transform", "translate(-700 ," + height + ")")
             .call(d3.axisBottom(xScaleInvert))
-
-
         }
 
-        d3.select("#split").on("click", splitBars);
-
+        d3.select("#split")
+        .on("click", splitBars);
+//         .on("click", function() {
+//
+//           var splitting = splitBars.splitting ? false : true,);
+// }
 
         // Add the "success" text to show/hide data
         svg.append("text")
@@ -555,24 +527,6 @@
             bar2.active = active;
           })
           .text("Failed");
-
-        //   //create legend for bar (http://d3-legend.susielu.com) old legend js
-        //   var ordinal = d3.scaleOrdinal()
-        //     .domain(["success", "failure"])
-        //     .range(["rgb(143, 226, 133)", "rgb(186, 42, 85)"]);
-        //
-        //
-        //   svg.append("g")
-        //     .attr("class", "legendOrdinal")
-        //     .attr("transform", "translate(" + (width - 70) + " ,50)");
-        //
-        //   var legendOrdinal = d3.legendColor()
-        //     .shape("path", d3.symbol().type(d3.symbolSquare).size(200)())
-        //     .shapePadding(10)
-        //     .scale(ordinal);
-        //
-        //   svg.select(".legendOrdinal")
-        //     .call(legendOrdinal);
       }
 
       //function calling to draw graph 1
@@ -599,7 +553,7 @@
           })
           .entries(data);
 
-
+console.log("project per month")
         console.log(projectPerMonth);
 
         //create an array to hold the month values (1-12)
@@ -620,15 +574,15 @@
         }
         console.log(values);
 
-        //parse out the number of projects that appear per month
-        var valuesFailed = new Array();
-        for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
-          if (projectPerMonth[1]["key"] == "true") {
-            values.push(projectPerMonth[1]["values"][i]["value"]);
-          } else {
-            values.push(projectPerMonth[0]["values"][i]["value"]);
-          }
-        }
+        // //parse out the number of projects that appear per month
+        // var valuesFailed = new Array();
+        // for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
+        //   if (projectPerMonth[1]["key"] == "true") {
+        //     values.push(projectPerMonth[1]["values"][i]["value"]);
+        //   } else {
+        //     values.push(projectPerMonth[0]["values"][i]["value"]);
+        //   }
+        // }
 
         //largest number that appears within array
         var projectCountMax = d3.max(values);
@@ -671,22 +625,20 @@
           .entries(data);
 
 
-
-        console.log(" project per month states ");
-        console.log(projectPerMonthStates);
-
-
-
-
         //define scales
         var xScale2 = d3.scalePoint();
         var yScale2 = d3.scaleLinear().range([height, 0]);
+
+        var yScalePercent = d3.scaleLinear().range([height, 0]);
 
 
         xScale2.domain(monthNames)
           .range([margin.left, 1000]);
 
         yScale2.domain([0, projectCountMax])
+          .range([height, 10]);
+
+        yScalePercent.domain([0,100])
           .range([height, 10]);
 
 
@@ -706,10 +658,11 @@
           var smallWidth = 300;
           var smallHeight = 400;
 
-
+//add x scale for third graph
           xScale3.domain(monthNames)
             .range([margin.left, 1000]);
 
+//add calculated y Scale based on project count
           yScale3.domain([0, projectCountMax])
             .range([smallHeight, 10]);
 
@@ -736,11 +689,6 @@
             .classed("svg-content-responsive2", true)
 
           ;
-
-          // d3.select(".svg-container")
-          // .append("button")
-          // .attr("class","")
-
 
           //append y axis to svg for project number
 
@@ -872,7 +820,7 @@
           .classed("svg-container2", true) //container class to make it responsive
           .append("svg")
           .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox", "0 0 1000 600")
+          .attr("viewBox", "0 0 1100 600")
           //class to make it responsive
           .classed("svg-content-responsive", true);
         //append x axis for months to svg
@@ -889,7 +837,7 @@
         svg2.append("g")
           .attr("class", "y-axis")
           .attr("transform", "translate(100,0)")
-          .call(d3.axisLeft(yScale2))
+          .call(d3.axisLeft(yScalePercent))
 
 
         //label title for current graph shown
@@ -922,9 +870,45 @@
           .text("Month created");
 
 
+// var successPositionPercent =
+// function(d) {
+//
+//   if (d.values[1].key == "true") {
+//     if (d.values[1].values[0].key == "successful") {
+//       return yScale2(d.values[1].values[0].value);
+//     } else {
+//       return yScale2(d.values[1].values[1].value);
+//     }
+//   } else {
+//
+//     if (d.values[0].values[0].key == "successful") {
+//       return yScale2(d.values[0].values[0].value);
+//     } else {
+//       return yScale2(d.values[0].values[1].value);
+//     }
+//
+//   }
+// }
 
+function successVal(d){
+  if (d.values[1].key == "true") {
+    if (d.values[1].values[0].key == "successful") {
+      return yScale2(d.values[1].values[0].value);
+    } else {
+      return yScale2(d.values[1].values[1].value);
+    }
+  } else {
 
+    if (d.values[0].values[0].key == "successful") {
+      return yScale2(d.values[0].values[0].value);
+    } else {
+      return yScale2(d.values[0].values[1].value);
+    }
+  }
+}
 
+console.log("help")
+console.log(projectCountMax)
 
 
         //draw all the circles corrisponding to success
@@ -938,24 +922,27 @@
 
             return xScale2(monthNames[d.key - 1]);
           })
-          .attr("cy", function(d) {
+          .attr("cy",[(successVal(projectCountMax)/projectCountMax)*100]
 
-            if (d.values[1].key == "true") {
-              if (d.values[1].values[0].key == "successful") {
-                return yScale2(d.values[1].values[0].value);
-              } else {
-                return yScale2(d.values[1].values[1].value);
-              }
-            } else {
+//i need to divide this value by 'projectCountMax'...but how do i change this if statement into a variable I can work with? *100
+          // function(d) {
+          //   if (d.values[1].key == "true") {
+          //     if (d.values[1].values[0].key == "successful") {
+          //       return (yScale2(d.values[1].values[0].value);
+          //     } else {
+          //       return (yScale2(d.values[1].values[1].value);
+          //     }
+          //   } else {
+          //
+          //     if (d.values[0].values[0].key == "successful") {
+          //       return (yScale2(d.values[0].values[0].value);
+          //     } else {
+          //       return (yScale2(d.values[0].values[1].value);
+          //     }
+          //   }
+          // }
 
-              if (d.values[0].values[0].key == "successful") {
-                return yScale2(d.values[0].values[0].value);
-              } else {
-                return yScale2(d.values[0].values[1].value);
-              }
-
-            }
-          })
+        )
           .transition()
 
           .attr("r", "6")
