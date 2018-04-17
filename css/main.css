@@ -48,7 +48,6 @@ a.clearAll{
 a.clearAll:after{
   content: '';
   display:table;
-
 }
 
 a.clearAll:hover{
@@ -277,17 +276,6 @@ path{
   /* stroke: white; */
  /*  stroke-width: 1px; */
 }
-
-/* g.tick text{
-	color:white;
-
-	fill:white;
-}
-
-text{
-	color:white;
-	fill:white;
-} */
 
 #brush-tool {
 	display:block;

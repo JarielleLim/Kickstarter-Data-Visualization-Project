@@ -1,6 +1,6 @@
     var url = "https://www.sfu.ca/~jdlim/iat355/ks-projects-parsed.csv";
 
-
+   var splitChart=false;
     //load in data from online source
     d3.csv(url, function(error, data) {
       //var margin = 100;
@@ -120,6 +120,13 @@
       });
 
       var maxNumberProject = d3.max(catValueArray);
+
+      // var width = window.innerWidth;
+      // var height = window.innerHeight;
+      //
+      // var widthGraph = window.innerWidth + padding + padding;
+      // var heightGraph = window.innerHeight + padding + padding;
+
 
       //define color scale
       var colorScale =
@@ -307,7 +314,7 @@
 
         //label for y axis: kickstarter main categories
         svg.append("text")
-          .attr("id", "yAxisText")
+        .attr("id", "yAxisText")
           .attr("transform", "rotate(-90)")
           .attr("y", 0)
           .attr("x", 0 - (height / 2))
@@ -317,7 +324,7 @@
 
         //label for x axis: # of Project Per Category
         svg.append("text")
-          .attr("id", "xAxisText")
+        .attr("id", "xAxisText")
           .attr("transform",
             "translate(" + (width / 2) + " ," +
             (height + margin.bottom) + ")")
@@ -364,6 +371,13 @@
 
         d3.select("#sort").on("click", sortBars);
 
+        // var xScaleFailed = function(d) {
+        //   if (d.values[0].key == "failed") {
+        //     return d3.max(d.values[0].value)
+        //   }
+        // }
+
+        //console.log("xScaleFailed" + xScaleFailed(projectCount))
 
         var widthFailed = function(d) {
           if (d.values[0].key == "failed") {
@@ -375,36 +389,55 @@
 
         console.log("Width Failed " + widthFailed)
 
+        // var maxPos = function(d) {
+        //   d3.max(d.values[1].value)
+        // }
 
 
         var splitBars = function() {
 
+          splitChart=true;
+
           var xScaleInvert = d3.scaleLinear()
           xScaleInvert.domain([0, maxNumberProject])
+            // xScaleInvert.domain([0, function(d){d3.max(d.values[1].value)}])
             .range([width, margin.left]);
 
+          // var xScaleNew = d3.select("xScale")
+          //   .domain([0, function(d) {
+          //     d3.max(d.values[1].value)
+          //   }])
+          // var xScaleNew = d3.scaleLinear()
+          // xScaleNew.domain([0, function(d){d3.max(d.values[1].value)}])
+          //   .range([width, margin.left]);
+          //select first div in html to place first graph in
+          //proper syntax to subtract margin from width?? keep getting null x
           d3.select("svg")
             .attr("viewBox", "-580 0 1000 600")
-          d3.select("#xAxisText")
-            .attr("x", "-500")
+  d3.select("#xAxisText")
+  .attr("x", "-500")
 
-          d3.select("#yAxisText")
-            .attr("y", "-550")
+  d3.select("#yAxisText")
+  .attr("y", "-550")
 
-          d3.selectAll(".legend")
-            .attr("x", "-500")
+  d3.selectAll(".legend")
+  .attr("x", "-500")
 
-          d3.selectAll(".legendText")
-            .attr("x", "-470")
+  d3.selectAll(".legendText")
+  .attr("x", "-470")
 
           d3.selectAll(".bar2")
-
+            // widthFailed -
+            // .attr("x",  widthFailed)
+            // .attr("transform", "translate("+ widthFailed + ", 0)")
+            // .attr("x", margin.Left)
             .attr("x", function(d) {
               if (d.values[1].key == "failed") {
                 return xScale(-d.values[1].value);
               } else {
                 return xScale(-d.values[0].value);
               }
+
             })
 
             .attr("width", widthFailed);
@@ -414,14 +447,12 @@
             .attr("class", "x-axisInv")
             .attr("transform", "translate(-700 ," + height + ")")
             .call(d3.axisBottom(xScaleInvert))
+
+
         }
 
-        d3.select("#split")
-        .on("click", splitBars);
-//         .on("click", function() {
-//
-//           var splitting = splitBars.splitting ? false : true,);
-// }
+        d3.select("#split").on("click", splitBars);
+
 
         // Add the "success" text to show/hide data
         svg.append("text")
@@ -466,9 +497,23 @@
           .attr("width", "20")
           .attr("height", "20")
           .on("click", function() {
-            // Determine if current line is visible
-            var active = bar.active ? false : true,
+
+            //check if bar chosen is 'active' and opacity is full
+              var active = bar.active ? false : true,
               newOpacity = active ? 0 : 1;
+
+            // Determine if current line is visible
+            if(splitChart==true){
+
+
+              // Hide or show the elements
+              d3.selectAll(".bar").style("opacity", newOpacity);
+
+              //Update whether or not the elements are active
+              bar.active = active;
+            }
+            else {
+
 
             // Hide or show the elements
             d3.selectAll(".bar").style("opacity", newOpacity);
@@ -489,6 +534,9 @@
                 }
               })
             }
+
+
+          }
           })
           .style("fill", "rgb(143, 226, 133)");
 
@@ -520,8 +568,7 @@
           .on("click", function() {
             // Determine if current line is visible
             var active = bar2.active ? false : true,
-              newOpacity = active ? 0 : 1;
-            // Hide or show the elements
+              newOpacity = active ? 0 : 1;            // Hide or show the elements
             d3.selectAll(".bar2").style("opacity", newOpacity);
             // Update whether or not the elements are active
             bar2.active = active;
@@ -553,7 +600,7 @@
           })
           .entries(data);
 
-console.log("project per month")
+
         console.log(projectPerMonth);
 
         //create an array to hold the month values (1-12)
@@ -574,15 +621,15 @@ console.log("project per month")
         }
         console.log(values);
 
-        // //parse out the number of projects that appear per month
-        // var valuesFailed = new Array();
-        // for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
-        //   if (projectPerMonth[1]["key"] == "true") {
-        //     values.push(projectPerMonth[1]["values"][i]["value"]);
-        //   } else {
-        //     values.push(projectPerMonth[0]["values"][i]["value"]);
-        //   }
-        // }
+        //parse out the number of projects that appear per month
+        var valuesFailed = new Array();
+        for (i = 0; i < projectPerMonth[1]["values"].length; i++) {
+          if (projectPerMonth[1]["key"] == "true") {
+            values.push(projectPerMonth[1]["values"][i]["value"]);
+          } else {
+            values.push(projectPerMonth[0]["values"][i]["value"]);
+          }
+        }
 
         //largest number that appears within array
         var projectCountMax = d3.max(values);
@@ -625,20 +672,22 @@ console.log("project per month")
           .entries(data);
 
 
+
+        console.log(" project per month states ");
+        console.log(projectPerMonthStates);
+
+
+
+
         //define scales
         var xScale2 = d3.scalePoint();
         var yScale2 = d3.scaleLinear().range([height, 0]);
-
-        var yScalePercent = d3.scaleLinear().range([height, 0]);
 
 
         xScale2.domain(monthNames)
           .range([margin.left, 1000]);
 
-        yScale2.domain([0, projectCountMax])
-          .range([height, 10]);
-
-        yScalePercent.domain([0,100])
+        yScale2.domain([0, 100])
           .range([height, 10]);
 
 
@@ -658,11 +707,10 @@ console.log("project per month")
           var smallWidth = 300;
           var smallHeight = 400;
 
-//add x scale for third graph
+
           xScale3.domain(monthNames)
             .range([margin.left, 1000]);
 
-//add calculated y Scale based on project count
           yScale3.domain([0, projectCountMax])
             .range([smallHeight, 10]);
 
@@ -687,7 +735,6 @@ console.log("project per month")
             .attr("viewBox", "0 0 1000 550")
             //class to make it responsive
             .classed("svg-content-responsive2", true)
-
           ;
 
           //append y axis to svg for project number
@@ -795,9 +842,6 @@ console.log("project per month")
               return a.key - b.key;
 
             }))
-
-
-
             .attr("class", "failed")
             .attr("stroke-linejoin", "round")
             .attr("stroke-linecap", "round")
@@ -810,17 +854,13 @@ console.log("project per month")
           //If id already exist, then don't generate any charts
         }
 
-
-
-
-
         //append a new div in html inside chartId2 to contain graph
         var svg2 = d3.select("div#chartId2")
           .append("div")
           .classed("svg-container2", true) //container class to make it responsive
           .append("svg")
           .attr("preserveAspectRatio", "xMinYMin meet")
-          .attr("viewBox", "0 0 1100 600")
+          .attr("viewBox", "0 0 1000 600")
           //class to make it responsive
           .classed("svg-content-responsive", true);
         //append x axis for months to svg
@@ -837,7 +877,7 @@ console.log("project per month")
         svg2.append("g")
           .attr("class", "y-axis")
           .attr("transform", "translate(100,0)")
-          .call(d3.axisLeft(yScalePercent))
+          .call(d3.axisLeft(yScale2))
 
 
         //label title for current graph shown
@@ -869,48 +909,6 @@ console.log("project per month")
           .style("text-anchor", "middle")
           .text("Month created");
 
-
-// var successPositionPercent =
-// function(d) {
-//
-//   if (d.values[1].key == "true") {
-//     if (d.values[1].values[0].key == "successful") {
-//       return yScale2(d.values[1].values[0].value);
-//     } else {
-//       return yScale2(d.values[1].values[1].value);
-//     }
-//   } else {
-//
-//     if (d.values[0].values[0].key == "successful") {
-//       return yScale2(d.values[0].values[0].value);
-//     } else {
-//       return yScale2(d.values[0].values[1].value);
-//     }
-//
-//   }
-// }
-
-function successVal(d){
-  if (d.values[1].key == "true") {
-    if (d.values[1].values[0].key == "successful") {
-      return yScale2(d.values[1].values[0].value);
-    } else {
-      return yScale2(d.values[1].values[1].value);
-    }
-  } else {
-
-    if (d.values[0].values[0].key == "successful") {
-      return yScale2(d.values[0].values[0].value);
-    } else {
-      return yScale2(d.values[0].values[1].value);
-    }
-  }
-}
-
-console.log("help")
-console.log(projectCountMax)
-
-
         //draw all the circles corrisponding to success
         circles = svg2.selectAll("circle.coordinate")
           .data(projectPerMonthStates)
@@ -922,27 +920,28 @@ console.log(projectCountMax)
 
             return xScale2(monthNames[d.key - 1]);
           })
-          .attr("cy",[(successVal(projectCountMax)/projectCountMax)*100]
+          .attr("cy", function(d) {
+                  // total=d.values[1].values[0].value+d.values[1].values[1].value
+                  //  +d.values[0].values[0].value+d.values[0].values[1].value;
 
-//i need to divide this value by 'projectCountMax'...but how do i change this if statement into a variable I can work with? *100
-          // function(d) {
-          //   if (d.values[1].key == "true") {
-          //     if (d.values[1].values[0].key == "successful") {
-          //       return (yScale2(d.values[1].values[0].value);
-          //     } else {
-          //       return (yScale2(d.values[1].values[1].value);
-          //     }
-          //   } else {
-          //
-          //     if (d.values[0].values[0].key == "successful") {
-          //       return (yScale2(d.values[0].values[0].value);
-          //     } else {
-          //       return (yScale2(d.values[0].values[1].value);
-          //     }
-          //   }
-          // }
 
-        )
+            if (d.values[1].key == "true") {
+              total=d.values[1].values[0].value+d.values[1].values[1].value;
+
+              if (d.values[1].values[0].key == "successful") {
+                return yScale2(d.values[1].values[0].value/total *100);
+              } else {
+                return yScale2(d.values[1].values[1].value/total*100);
+              }
+            } else {
+              total=d.values[0].values[0].value+d.values[0].values[1].value;
+              if (d.values[0].values[0].key == "successful") {
+                return yScale2(d.values[0].values[0].value/total *100);
+              } else {
+                return yScale2(d.values[0].values[1].value/total *100);
+              }
+            }
+          })
           .transition()
 
           .attr("r", "6")
@@ -952,6 +951,10 @@ console.log(projectCountMax)
           .style("fill", function(d) {
             return ("rgb(143, 226, 133)");
           });
+
+for (var i = 0; i <projectPerMonthStates; i++) {
+}
+
 
         //created 2nd set of circles to show failed projects
         circles2 = svg2.selectAll("circle.coordinate2")
@@ -967,19 +970,21 @@ console.log(projectCountMax)
           .attr("cy", function(d) {
 
             if (d.values[1].key == "true") {
+              total=d.values[1].values[0].value+d.values[1].values[1].value;
+
               if (d.values[1].values[0].key == "failed") {
-                return yScale2(d.values[1].values[0].value);
+                return yScale2(d.values[1].values[0].value/total*100);
               } else {
-                return yScale2(d.values[1].values[1].value);
+                return yScale2(d.values[1].values[1].value/total*100);
               }
             } else {
 
               if (d.values[0].values[0].key == "failed") {
-                return yScale2(d.values[0].values[0].value);
+                return yScale2(d.values[0].values[0].value/total*100);
               } else {
-                return yScale2(d.values[0].values[1].value);
+                return yScale2(d.values[0].values[1].value/total*100);
               }
-              return yScale2(d.values[0].values[0].value);
+              return yScale2(d.values[0].values[0].value/total*100);
             }
 
           })
