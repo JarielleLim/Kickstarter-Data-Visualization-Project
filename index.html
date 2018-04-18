@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>Assignment 4</title>
-	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+	<link href="https://fonts.google.com/specimen/Roboto" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script>
 	<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
@@ -16,35 +16,45 @@
 <body>
 	<div class="titleHead">
 		<h1 class="text">Success expectancy for <br> Kickstarter Projects in Canada</h1>
+		<div class="blurb">
+			<p class="names">By Jarielle Lim & Joshua Sun</p>
+			<p>A data visualization of Kickstarter projects in Canada between 2014 to 2018, </br> focusing on success and failure rates in the project type categories</p>
+			<p>Interactions:</p>
+			<ul>
+				<li>select bar charts to create learn more information about the specific category</li>
+				<li>hover over bars/points for tooptip information</li>
+				<li>select legend to show and hide bar</li>
+				<li>click buttons to sort/split chart</li>
+				<li>hover over success/failed for clearer readings in second visualization</li>
+			</ul>
+		</div>
 	</div>
 
 	<div class="container">
-	<div class="col-1-2">
-		<button id="sort" type="button">Sort Popularity</button>
-		<button id="split" type="button">Split Chart</button>
-		<div id="chartId"></div>
-	</div>
-
-	<div id="brush-tool">
-			<span onmouseover="filterSuccess()" onmouseout="backToNormal()">Success</span>
-			<span onmouseover="filterFailed()" onmouseout="backToNormal()">Failed</span>
-	<div>
-
-	<div class="col-2-2">
-		<div id="chartId2"></div>
-	</div>
-
-	<!-- <div class="col-4-12"> -->
-
-		<button class="clearAll" onclick="deleteChart()">Clear all</button>
-		<div id="chartId3" style="display:block;">
-			<h2>Trend line for year</h2>
-			<!-- <button class="clear">hello</button> -->
-
+		<div class="col-1-2">
+			<button id="sort" type="button">Sort Popularity</button>
+			<button id="split" type="button">Split Chart</button>
+			<h2>Success vs. Failed projects in each Category</h2>
+			<div id="chartId"></div>
 		</div>
-	<!-- </div> -->
 
-</div>
+		<div id="hidden">
+			<div id="brush-tool">
+				<span onmouseover="filterSuccess()" onmouseout="backToNormal()">Success</span>
+				<span onmouseover="filterFailed()" onmouseout="backToNormal()">Failed</span>
+			</div>
+
+			<div class="col-2-2">
+				<h2>Average number of project success/ failure trends over the year by percent</h2>
+				<div id="chartId2"></div>
+			</div>
+
+			<button class="clearAll" onclick="deleteChart()">Clear all</button>
+			<div id="chartId3" style="display:block;">
+				<h2>Average number of project success/ failure trends over the year</h2>
+			</div>
+		</div>
+	</div>
 
 </body>
 
