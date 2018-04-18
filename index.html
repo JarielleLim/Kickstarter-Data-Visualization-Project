@@ -17,28 +17,34 @@
 	<div class="titleHead">
 		<h1 class="text">Success expectancy for <br> Kickstarter Projects in Canada</h1>
 	</div>
+
+	<div class="container">
 	<div class="col-1-2">
 		<button id="sort" type="button">Sort Popularity</button>
+		<button id="split" type="button">Split Chart</button>
 		<div id="chartId"></div>
 	</div>
 
 	<div id="brush-tool">
 			<span onmouseover="filterSuccess()" onmouseout="backToNormal()">Success</span>
 			<span onmouseover="filterFailed()" onmouseout="backToNormal()">Failed</span>
-<div>
+	<div>
 
 	<div class="col-2-2">
 		<div id="chartId2"></div>
 	</div>
 
-	<div class="col-1-2">
-	</div>
+	<!-- <div class="col-4-12"> -->
 
-	<div class="col-2-2">
-		<div id="chartId3"></div>
-	</div>
+		<button class="clearAll" onclick="deleteChart()">Clear all</button>
+		<div id="chartId3" style="display:block;">
+			<h2>Trend line for year</h2>
+			<!-- <button class="clear">hello</button> -->
 
+		</div>
+	<!-- </div> -->
 
+</div>
 
 </body>
 
