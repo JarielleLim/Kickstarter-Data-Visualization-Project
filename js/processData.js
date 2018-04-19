@@ -1047,16 +1047,3 @@
         .transition()
         .attr("r", "10");
     }
-
-    // SOURCES
-    //   tool-tips
-    //     https://bl.ocks.org/ayala-usma/d2f3b89c84e4ed66e22d02affcdcab73
-    //   d3.nest
-    //     https://bl.ocks.org/ProQuestionAsker/60e7a6e3117f9f433ef9c998f6c776b6
-    //     https://stackoverflow.com/questions/27347617/how-to-use-nest-and-rollup-functions-in-d3-to-create-a-bar-chart
-    //   accessing nested data
-    //     https://stackoverflow.com/questions/11922383/access-process-nested-objects-arrays-or-json
-    //   legend
-    //     http://d3-legend.susielu.com
-    //   Scalable
-    //    https://stackoverflow.com/questions/16265123/resize-svg-when-window-is-resized-in-d3-js
